@@ -4,7 +4,7 @@ This example demonstrates presentation, not mandatory wording. No product featur
 
 ## Example request
 
-I am launching an AI productivity product for beginners. Create two Instagram posts and one 45-second video script. Use a casual, straightforward tone. We have no customers or measured results yet.
+I am launching an AI productivity product for beginners. Create two Instagram posts and one 45-second video script. Keep it conversational and punchy, not a lecture. We have no customers or measured results yet.
 
 ## Example response
 
@@ -16,40 +16,40 @@ Purpose: introduce the upcoming product and start a conversation with potential 
 
 **Instagram post 1 — caption to copy**
 
-> Curious about AI, but not sure where to start?
+> You came for a quick AI tip. Now you've got six tabs open.
 >
-> We are building an AI productivity product for beginners, and we are getting ready to introduce it.
+> And you're still asking: “Okay, but where do I actually start?”
 >
-> What would you want help with first: organising your ideas, planning your week, or creating content?
+> We're building an AI productivity product for beginners. If that question sounds familiar, you're who we have in mind.
 >
-> Tell us in the comments. We would like to hear what would make it useful to you.
+> As we get ready to introduce it, we'd like to hear about your day. What's the one task you'd want help with first?
 
 **Instagram post 2 — caption to copy**
 
-> We are working on something for people who are curious about AI and still figuring out where it fits in their day.
+> The AI demo looks impressive. But would you use it on a Tuesday?
 >
-> Our AI productivity product is being built with beginners in mind. As we prepare to launch, we want to hear what you would need to see before trying it.
+> Between the usual work, the half-finished plans, and everything else you've got going on.
 >
-> A clear demonstration? A simple explanation? A way to try it yourself?
+> If you're curious about AI and still figuring out where it fits, we're getting ready to introduce something for you: an AI productivity product built with beginners in mind.
 >
-> What would help you decide?
+> Follow along for the introduction.
 
 **Video — words to say**
 
-> We are building an AI productivity product for beginners.
+> You see an AI demo and think, “That looks useful.” Then you open the tool and think, “Right. What do I do now?”
 >
-> If you have been seeing AI tools everywhere and wondering where to start, you are the person we have in mind.
+> You're curious. You just haven't figured out where AI fits in your day.
 >
-> We are getting ready to introduce what we are working on, and we would like to hear from you first.
+> That's who we're thinking about as we build our AI productivity product: beginners.
 >
-> What is one everyday task you would want help with? Organising ideas? Planning your week? Creating content?
+> We're getting ready to introduce it. Before we do, we'd like to hear about the bit of your day where you'd want a hand.
 >
-> And what would you need to see before giving a new tool a go?
+> Maybe it's the ideas scattered across your notes. Maybe it's planning next week, or getting a content draft started.
 >
-> Tell us in the comments and follow along as we prepare to launch.
+> What's the one everyday task you'd want help with first?
 
 ### Production notes — for you
 
-- Video: speak directly to camera. The spoken text is roughly 100 words; check the requested 45 seconds with a read-through and adjust delivery or wording.
-- Optional opening overlay: `An AI productivity product for beginners`.
+- Video: speak directly to camera, with a small pause between the two opening reactions. The spoken text is roughly 100 words, or about 45 seconds at 135 words per minute; check with a read-through.
+- Optional opening overlay: `“Right. What do I do now?”`.
 - A concrete, verified product feature would make the next version more specific; none has been invented here.

@@ -28,15 +28,15 @@
     "hooks": [
       {
         "id": "hook-1",
-        "text": "A note that says 'make a productivity video' leaves future you a lot of work."
+        "text": "Ever opened a note that says 'content planning' and thought, 'What was I going to say?'"
       },
       {
         "id": "hook-2",
-        "text": "Next time a content idea hits, save these three lines."
+        "text": "Future you needs more than a two-word note."
       },
       {
         "id": "hook-3",
-        "text": "Here is how I would turn 'content planning' into a note I can actually use later."
+        "text": "Here's what I'd save instead of 'make a productivity video.'"
       }
     ],
     "assets": [
@@ -46,11 +46,11 @@
         "format": "video_script",
         "title": "A three-line idea inbox",
         "hook_id": "hook-1",
-        "content": "A note that says 'make a productivity video' leaves future you a lot of work.\n\nI keep forgetting content ideas when I am out, so here is a simple way to capture more than the topic.\n\nOpen a note and write three lines: the idea, who it helps, and one concrete example.\n\nFor instance: 'An idea inbox for new creators.' Who does it help? Someone thinking of posts between work and the commute. The example? A phone note with these exact three fields.\n\nNow, when you sit down to write, you have an audience and something specific to show. You still need to develop the draft, but you do not have to reconstruct the whole thought.\n\nTry it with the next idea you would normally leave as a two-word note.",
-        "caption": "Give your next content idea three lines: what it is, who it helps, and one example you can show.",
-        "call_to_action": "Try it with the next idea you would normally leave as a two-word note.",
+        "content": "Ever opened a note that says 'content planning' and thought, 'What was I going to say?'\n\nI keep forgetting content ideas when I'm out. So here's the phone-note version I'd use to hang on to the actual thought.\n\nThree lines: the idea, who it helps, and one example.\n\nSay the idea is a phone-note inbox. Who's it for? New creators thinking of posts between work and the commute. What could you show? One note with those three lines filled in.\n\nThat's something to come back to. You've got the point, the person you're talking to, and an example to start with.\n\nNext time an idea hits, give future you all three lines.",
+        "caption": "'What was I going to say?' Give future you a clue: the idea, who it's for, and one example.",
+        "call_to_action": "Next time an idea hits, give future you all three lines.",
         "production_notes": [
-          "Estimated spoken duration: roughly 50–60 seconds at a conversational pace; check with a read-through.",
+          "Spoken length: roughly 110 words, or 45–55 seconds at 120–150 words per minute; check with a read-through.",
           "Record a simple talking-head shot and optionally show the sample phone note; hide unrelated personal notes.",
           "Optional on-screen text: Idea / Who it helps / One example."
         ]
@@ -61,9 +61,9 @@
         "format": "text_post",
         "title": "The note you can use later",
         "hook_id": "hook-2",
-        "content": "Next time a content idea hits, save these three lines:\n\nIdea: What is the point?\nWho it helps: Who would recognise this problem?\nExample: What could I show them?\n\n'Content planning' is a topic.\n\n'A phone-note inbox for new creators, demonstrated with one idea from the commute' gives you a starting point for a draft.\n\nTry the three-line version with one idea in your notes today.",
+        "content": "Future you needs more than a two-word note.\n\nA tiny template for the next idea that shows up while you're out:\n\nIdea: I want to talk about ___.\nWho it helps: This is for someone who ___.\nExample: I could show them ___.\n\nThe last line is worth filling in. 'Content planning' can go in a dozen directions. One example gives you somewhere to start.\n\nCopy the three lines into a phone note for your next idea.",
         "caption": null,
-        "call_to_action": "Try the three-line version with one idea in your notes today.",
+        "call_to_action": "Copy the three lines into a phone note for your next idea.",
         "production_notes": []
       },
       {
@@ -72,9 +72,9 @@
         "format": "text_post",
         "title": "Revisit an old idea",
         "hook_id": null,
-        "content": "Open an old content idea in your notes. Can you still explain who it was for and what example you wanted to use?\n\nIf either detail is missing, add it now. You might discover that one vague topic contains several possible posts.\n\nChoose the one you can illustrate most clearly. Keep the others in the inbox.\n\nWhich detail do your saved ideas usually lose first: the audience, the example, or the point?",
+        "content": "This note definitely made sense when you wrote it.\n\nNow it's just 'productivity video' staring back at you.\n\nBefore you try to turn it into a whole post, add the missing context: who it's for and one example you could show.\n\nIf the topic points to several different posts, choose the one with the clearest example. Leave the others in your inbox.\n\nOpen one old idea and finish this sentence: 'I could show this with…'",
         "caption": null,
-        "call_to_action": "Which detail do your saved ideas usually lose first: the audience, the example, or the point?",
+        "call_to_action": "Open one old idea and finish this sentence: 'I could show this with…'",
         "production_notes": []
       }
     ],

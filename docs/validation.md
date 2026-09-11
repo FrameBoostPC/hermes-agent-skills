@@ -1,6 +1,6 @@
 # Validation notes
 
-Date: 2026-09-11. Initial baseline: all skill packages `0.1.0`. Current Idea to Content package: `0.1.1`; other packages remain `0.1.0`. Output contract: `1.0`.
+Date: 2026-09-11. Initial baseline: all skill packages `0.1.0`. Current Idea to Content package: `0.1.2`; other packages remain `0.1.0`. Output contract: `1.0`.
 
 ## Initial local baseline
 
@@ -41,6 +41,18 @@ A separate assistant generated a launch response, an explicitly requested educat
 That launch run unnecessarily repeated the lack of customers/results in promotional copy. The instructions were refined to treat background constraints as limits on claims rather than automatic audience-facing statements.
 
 A further launch variant used a fictional product name, one Instagram caption, and a 30-second video with no confirmed features. That specific request was absent from the reference. Manual review found the requested product introduction, distinct copy boundaries, no invented capabilities or results, and background constraints kept in creator guidance. The script contains 60 spoken words; actual delivery time still requires a read-through. The package/link and skill-format validators passed again after the refinement. All four readability outputs remain in ignored local `test-results/idea-to-content/readability/`; none was executed through Hermes.
+
+## Idea to Content social writing revision
+
+Version `0.1.2` responds to feedback that captions and scripts sounded like a lecture. The default now uses conversational social copy, an opening grounded in the user's actual idea, and a useful payoff. It keeps explicit tone/brand choices and educational steps intact, uses calls to action only where useful or requested, and preserves the copy/guidance boundaries introduced in `0.1.1`. Both reference outputs were rewritten. This is a writing-direction change, not evidence of higher reach or virality.
+
+A separate assistant generated three responses from the updated skill without consulting examples, test-case definitions, or prior outputs:
+
+- An upcoming voice-memo-to-caption app: one conversational Instagram caption and a roughly 30-second script. Review found a relatable walking/forgotten-wording hook, light humour, the sole supplied feature preserved, and separate production notes.
+- A professional architecture post: a measured, formal draft under the requested 90 words, with no slang, emoji, call to action, or invented experience. The explicit voice took priority over the casual default.
+- A freelancer weekly reset: a lively educational caption containing all three supplied steps. Its dashboard JSON passed the repository output validator; review found no invented results or missing payoff.
+
+The package validator passed three packages, their updated examples, and 24 behavioural case definitions; the skill-creator format check also passed. Validator implementation and schemas were unchanged, so the earlier 18-test regression suite was not rerun for this prose-only revision. The three generated responses remain in ignored `test-results/idea-to-content/social-voice/`. These are local authoring checks, not Hermes execution or audience-performance tests.
 
 ## Still required in the product environment
 

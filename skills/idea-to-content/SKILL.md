@@ -2,7 +2,7 @@
 name: idea-to-content
 description: Turn ideas or source material into social content drafts.
 metadata:
-  version: "0.1.1"
+  version: "0.1.2"
 ---
 
 # Idea to Content
@@ -23,13 +23,17 @@ When no format is specified, prepare three distinct hooks, one selected angle, a
 
 ## Draft the pack
 
-1. Identify the central idea and the audience's specific problem or interest. Choose one angle with a clear takeaway that the available material supports. Differentiate hooks by approach, such as a useful observation, a concrete problem, or a specific demonstration; avoid three paraphrases of the same claim.
-2. Build each asset around that angle. Use concrete details from the brief, natural spoken language for scripts, and useful substance after the hook. Adapt structure and wording for each requested platform rather than repeating identical copy. If repurposing, preserve the source's meaning, attribution, uncertainty, and qualifications.
+1. Identify the central idea, details that must survive, and the audience's specific problem or interest. Choose an angle with a clear payoff supported by the material. Build the opening from that idea: a recognisable moment, a specific tension, a surprising detail, or a demonstration. Differentiate alternative hooks by approach; avoid paraphrases of the same claim or generic hype that could advertise anything.
+2. Build each asset around that angle. Default to engaging, conversational social copy: sound like someone sharing something worth noticing with a peer. Use the user's themes and concrete details in the hook and payoff, rather than bolting them onto a generic viral template. Explicit tone, audience, brand voice, and writing samples take priority over this default. If repurposing, preserve the source's meaning, attribution, uncertainty, and qualifications.
 3. Make scripts filmable: separate spoken words from optional on-screen text and actions. Estimate timing from spoken words and delivery pace; do not promise exact duration. Keep the main content usable without buying assets or recording elaborate footage. Supporting posts should stand alone and add a different detail or perspective.
-4. Use a call to action that matches the user's actual goal. Do not invent an offer, URL, free download, product feature, testimony, income, follower count, or personal experience. With no commercial goal, favour an appropriate question or a practical next step.
-5. Review for factual support, repetition, unsupported superlatives, mismatched voice, and compliance with the requested counts and formats. Deliver actual draft copy, not instructions for the user to write it. Identify any essential fact the user must supply before use.
+4. End with a payoff and, where useful or requested, one natural call to action that matches the user's goal. A satisfying ending can stand without an engagement request. Do not invent an offer, URL, free download, product feature, testimony, income, follower count, or personal experience. Avoid unrelated comment bait or repeating the same question beneath every asset.
+5. Read the copy aloud and review for a specific opening, natural rhythm, a delivered payoff, and preservation of the user's central idea. Remove lecture-like framing, filler, repeated explanations, and generic company-announcement language. Check factual support, voice, and requested counts/formats. Deliver actual draft copy, not instructions for the user to write it. Identify any essential fact the user must supply before use.
 
-Use supplied facts as supplied facts, not independently verified facts. Do not fabricate statistics or promise virality. When a claim requires current external evidence, verify it with available tools and identify the source, or omit/qualify it and explain any material limitation. Do not treat an unverified claimed result as the user's real experience.
+For captions, make the first line work in the feed, use short readable paragraphs, and develop one idea. For scripts, start with the moment or hook instead of a greeting or agenda, then move through a small number of connected beats in language someone would actually say. Adapt each asset to its requested platform rather than repeating identical copy. Vary sentence length; punchy does not mean every sentence is a fragment. Let humour, curiosity, emotion, or a relatable frustration fit the subject and audience rather than forcing slang, emoji, or confrontation.
+
+Aim to earn attention, continued viewing, and sharing through specificity and a worthwhile payoff. Resolve curiosity in the content; do not withhold the useful part merely to demand a follow. Educational content can still teach: use an example or demonstration and conversational explanation, keeping any steps the user requested. Product content should make the supplied product idea interesting, not drift into a lesson about AI. With sparse facts, use a modest teaser rather than pretending there is a feature reveal.
+
+Use supplied facts as supplied facts, not independently verified facts. Do not fabricate statistics, urgency, or social proof, or promise virality. When a claim requires current external evidence, verify it with available tools and identify the source, or omit/qualify it and explain any material limitation. Do not treat an unverified claimed result as the user's real experience.
 
 ## Output and action boundaries
 
@@ -38,7 +42,7 @@ For a normal human-readable answer, make the two audiences explicit:
 - **For you — guidance, not for publishing:** at most a few short lines naming the intended purpose, important assumptions, and any missing product detail that affects use. Omit this section when the user requests copy only or there is nothing useful to explain.
 - **Content to publish:** label each deliverable by its use, such as `Instagram post 1 — caption to copy` or `Video — words to say`. Put the complete caption or spoken script in its own blockquote or another clearly bounded copy area. Keep creator instructions, angle explanations, duration estimates, and editorial labels outside that area. A quoted prompt inside an educational post is part of the audience-facing copy; make the topic clear in the guidance.
 
-Put optional filming, visuals, and timing in a separate **Production notes — for you** section linked to the relevant deliverable. If alternative hooks were requested or are part of the default pack, label them **Alternative opening lines — choose one**; they are optional publishable lines, not instructions. Explicit requests for only specific drafts override the default hook list. Include the chosen hook and call to action in the finished draft so the user does not need to assemble it from scattered sections. An Instagram text-post draft is caption copy; any suggested image or overlay is labelled separately.
+Put optional filming, visuals, and timing in a separate **Production notes — for you** section linked to the relevant deliverable. If alternative hooks were requested or are part of the default pack, label them **Alternative opening lines — choose one**; they are optional publishable lines, not instructions. Explicit requests for only specific drafts override the default hook list. Include the chosen hook and any call to action in the finished draft so the user does not need to assemble it from scattered sections. An Instagram text-post draft is caption copy; any suggested image or overlay is labelled separately.
 
 Use the user's requested structure when supplied. See [the readable output example](references/readable-output.md) for a product-launch response with clear copy boundaries; adapt its presentation rather than reusing its wording or facts.
 

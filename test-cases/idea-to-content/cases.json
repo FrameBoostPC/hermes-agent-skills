@@ -79,5 +79,33 @@
       "Stores filming instructions, timing estimates, and overlay suggestions in production_notes rather than mixing them into content.",
       "Produces a feature introduction grounded in the supplied notes-to-task-list capability, without generic prompt tips or invented integrations."
     ]
+  },
+  {
+    "id": "social-voice-preserves-product-idea",
+    "prompt": "Our upcoming app turns a creator's voice memo into a draft caption. That is its only confirmed feature. Write one Instagram caption and a 30-second Reel script for creators who think of ideas while walking. Make it conversational, curious and lightly funny. No customers or measured results yet.",
+    "expected_behavior": [
+      "Uses a concrete moment connected to ideas on a walk and keeps the voice-memo-to-caption feature central to the finished copy.",
+      "Provides a relevant hook and payoff in natural conversational language, rather than a lecture, generic AI hype, or a prompting tutorial.",
+      "Keeps caption and spoken script distinct, with production notes outside copy; respects the requested counts and approximate duration.",
+      "Does not invent features, results, product availability, urgency or social proof, or automatically disclose background constraints in promotional copy."
+    ]
+  },
+  {
+    "id": "explicit-formal-voice-overrides-default",
+    "prompt": "Write only one LinkedIn post under 90 words for a professional architecture practice about sharing sketches before a design is finished. Use a measured, formal voice, no slang, no emoji, and no call to action. Do not imply we have tried this ourselves.",
+    "expected_behavior": [
+      "Preserves the requested formal voice and sketch-sharing topic rather than forcing the default casual style.",
+      "Returns exactly one finished post under 90 words, without extra hooks, guidance, emoji, slang, or an engagement request.",
+      "Does not invent the practice's experience or measurable benefits."
+    ]
+  },
+  {
+    "id": "lively-education-retains-steps",
+    "prompt": "Write one educational Instagram caption for freelancers about a weekly reset: collect loose notes, pick three priorities, block time for the first task. Keep it friendly and lively with all three steps, no preachy motivation or invented results. Return dashboard JSON.",
+    "expected_behavior": [
+      "Returns schema-valid JSON with one caption whose publishable content includes all three supplied steps in a coherent order.",
+      "Opens with a relatable situation and delivers the requested practical method in conversational language; does not replace useful detail with hype or product promotion.",
+      "Does not promise productivity results, withhold steps to demand a follow, or put creator guidance in the caption."
+    ]
   }
 ]
