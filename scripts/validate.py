@@ -244,6 +244,15 @@ def check_semantics(output: dict, path: Path, errors: list[str]) -> None:
     elif output["skill"] == "research-brief":
         index_ids(data["findings"], "findings", path, errors)
         sources = index_ids(data["sources"], "sources", path, errors)
+        # Reader-facing narrative strings use individual [source-N] tokens.
+        # Check identity only: factual support and missing citations need review.
+        narratives = [("$.summary", output["summary"]), ("$.data.answer", data["answer"])]
+        for field in ("conflicts", "next_actions"):
+            narratives.extend((f"$.data.{field}[{index}]", value) for index, value in enumerate(data[field]))
+        for field, value in narratives:
+            for source_id in re.findall(r"\[(source-[^\]\n]+)\]", value):
+                if source_id not in sources:
+                    errors.append(f"{label(path)}: {field}: unknown inline source {source_id!r}")
         for index, finding in enumerate(data["findings"]):
             for source_id in finding["source_ids"]:
                 if source_id not in sources:

@@ -3,7 +3,7 @@
   "skill": "project-planner",
   "status": "ready",
   "title": "Publish a tutoring enquiry page in two weeks",
-  "summary": "Use two three-hour work blocks to write, build, test, and publish one page with an enquiry form.",
+  "summary": "Plan a maths tutoring enquiry page over two weeks, with three hours available each week. Week one covers the offer, copy, and draft page; week two covers form testing, a mobile check, and publication. All six hours are allocated, with no spare time included. This assumes you already have a suitable site-builder account; estimates should be adjusted after the first work session. Start by defining the tutoring offer.",
   "assumptions": ["You already have a site builder account and can publish without purchasing a new service.", "Effort estimates are rough and should be adjusted after the first work session.", "Weeks are relative planning blocks because no start date was provided."],
   "questions": [],
   "limitations": ["This is a proposed plan; no site, form, or calendar event has been created."],

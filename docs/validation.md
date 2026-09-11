@@ -1,6 +1,6 @@
 # Validation notes
 
-Date: 2026-09-11. Initial baseline: all skill packages `0.1.0`. Current Idea to Content package: `0.1.3`; other packages remain `0.1.0`. Output contract: `1.0`.
+Date: 2026-09-11. Initial baseline: all skill packages `0.1.0`. Current packages: Idea to Content `0.1.3`, Research Brief `0.1.1`, Project Planner `0.1.1`. Output contract: `1.0`.
 
 ## Initial local baseline
 
@@ -55,6 +55,19 @@ A separate assistant generated three responses from the updated skill without co
 The package validator passed three packages, their updated examples, and 24 behavioural case definitions; the skill-creator format check also passed. Validator implementation and schemas were unchanged, so the earlier 18-test regression suite was not rerun for this prose-only revision. The three generated responses remain in ignored `test-results/idea-to-content/social-voice/`. These are local authoring checks, not Hermes execution or audience-performance tests.
 
 Version `0.1.3` is a label-only follow-up: the readable response uses `User guidance` and `Production notes` in place of headings containing `For you`. Instructions and the readable example agree; the output schema is unchanged.
+
+## Summary and In depth views
+
+Research Brief and Project Planner `0.1.1` use the existing `summary` and `data` fields for two reading views of one result. No schema fields or contract version changed. Chat defaults to Summary and accepts explicit requests for either view or both. The integration guide specifies the dashboard toggle, shared limitations/status, capacity display, and research source-token rendering.
+
+Package validation passed all three packages, their examples, and 28 behavioural case definitions. Both revised skill packages passed the skill-creator format check. All 21 validator regression tests passed, including new checks for inline research references in summaries, answers, conflicts, and next actions, and missing-evidence results. These checks validate structure and reference identity, not the truth or completeness of citations.
+
+Two separate assistant workers followed the revised instructions without reading example outputs or test cases:
+
+- Research: supplied fictional ClipMap snippets disagreed on AUD 18 versus AUD 32 pricing against an AUD 25 budget. The summary and full brief both kept affordability unresolved, retained the same conditional recommendation, identified unverified supplied text, and cited existing sources. The generated JSON passed validation.
+- Planning: a ten-lesson course launch with 45 minutes total produced a partial preparation plan. The summary and detailed plan both deferred the full launch, used the same three tasks and 45-minute allowance, and left calendar dates and further capacity unknown. The generated JSON passed validation.
+
+The raw outputs remain under ignored `test-results/research-brief/two-views/` and `test-results/project-planner/two-views/`. These were local JSON instruction-following tests; no Hermes runtime, live research retrieval, or actual dashboard toggle was exercised in this revision. The new Summary-only chat scenarios are saved case definitions, not additional executed runs.
 
 ## Still required in the product environment
 

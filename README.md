@@ -12,6 +12,8 @@ Each skill is a portable folder with instructions, a dashboard output schema, an
 
 The skills return readable answers by default. Add `Return dashboard JSON` to request the structured result defined in that skill's `templates/output.schema.json`. See [dashboard integration](docs/integration.md) for status meanings and application responsibilities.
 
+Research Brief and Project Planner support **Summary** and **In depth** reading views. Chat defaults to Summary; ask for `In depth only` or `both views` when needed. Dashboard JSON contains a condensed `summary` and complete `data` in the same response, ready for the dashboard's view toggle. Both views retain important limitations and describe the same result.
+
 ## Structure
 
 ```text

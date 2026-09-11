@@ -2,7 +2,7 @@
 name: project-planner
 description: Turn goals into practical project plans and next actions.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Project Planner
@@ -28,9 +28,14 @@ If there is no identifiable goal, ask one concise question and return `needs_inp
 
 ## Output
 
-In ordinary chat, give the goal, assumptions, milestones, a compact task list grouped by week with rough effort, and the first action. Show capacity totals when hours were supplied. Respect a user-requested shorter format.
+Prepare one coherent plan with two reading views: **Summary** and **In depth**. Derive the summary from the complete plan, preserving its goal, scope, constraints, estimates, and status. The views are different levels of explanation, not independent plans.
 
-When the user or calling application explicitly requests dashboard JSON, JSON mode, or structured output, load [the output schema](templates/output.schema.json) and return only one JSON object matching it, without Markdown fences or commentary. The complete [example output](examples/example-output.json) illustrates a two-week tutoring-page project with three hours available each week; its names and estimates are examples to adapt, not reusable defaults.
+- **Summary:** normally two to four plain-language sentences covering the outcome, main stages, and any decisive assumption or limitation. Aim for roughly 60–100 words when useful, but use less for a small or blocked request. Include the planned effort versus supplied capacity and one concrete first action in the readable view. When the full goal is infeasible, say so and name the feasible subset; do not hide deferred essentials behind the detail view.
+- **In depth:** explain the goal, completion criteria, assumptions, milestones, tasks by week, deliverables, dependencies, effort/capacity totals, deferred scope, limitations, and first action. Explain choices or tradeoffs where useful. Add useful detail without padding, introducing new commitments, or expanding the project.
+
+In ordinary chat, default to Summary. Respect requests for Summary only, In depth only, or both; label both sections when both are requested. Missing dates or capacity stay unknown in both views. A longer answer must not invent a more detailed calendar or additional available hours.
+
+When the user or calling application explicitly requests dashboard JSON, JSON mode, or structured output, load [the output schema](templates/output.schema.json) and return only one JSON object matching it, without Markdown fences or commentary. Always include both reading views in that single result: use the existing top-level `summary` for the condensed explanation and `data` for the complete plan. Do not add parallel answer objects or regenerate the plan when the reader changes views. The dashboard adds `data.first_action` and computed capacity totals to its Summary view, and keeps status and material limitations visible in either view. For `needs_input`, return questions with `data: null` rather than fabricating two views. The complete [example output](examples/example-output.json) illustrates a two-week tutoring-page project with three hours available each week; its names and estimates are examples to adapt, not reusable defaults.
 
 Envelope rules: `schema_version` is `1.0`; `skill` is `project-planner`. `ready` means the requested plan is prepared, not that project tasks were executed. `partial` means useful planning was possible but a material constraint or missing dependency remains; supply at least one limitation. `needs_input` requires a question and null `data`. For `ready`, keep questions empty. Ordinary unknowns belong in assumptions and limitations, not a needless clarification loop.
 
@@ -44,4 +49,4 @@ The output proposes work. Do not create calendar events, buy services, contact p
 
 ## Verification
 
-Before returning, check that tasks advance the stated goal, preserve explicit constraints, have actionable deliverables, and fit the stated capacity. Check IDs, dependency order, week totals, and any supplied deadline. Confirm that deferred work is visible and the first action can actually be taken. Validate the JSON against the linked schema when a validator is available; otherwise check the fields without claiming an automated validation ran.
+Before returning, check that tasks advance the stated goal, preserve explicit constraints, have actionable deliverables, and fit the stated capacity. Check IDs, dependency order, week totals, and any supplied deadline. Compare the summary against the full plan: the scope, budgets, dates, feasibility, and first action must agree. Confirm that deferred work is visible and the first action can actually be taken. Validate the JSON against the linked schema when a validator is available; otherwise check the fields without claiming an automated validation ran.

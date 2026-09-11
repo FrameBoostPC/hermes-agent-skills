@@ -28,5 +28,23 @@
     "id": "respect-existing-progress",
     "prompt": "My portfolio copy and design are already finished. I have two hours a week to implement it in my existing static site. Plan the remaining work without changing the design or choosing a new framework.",
     "expected_behavior": ["Focus on implementation, checks, and publishing using the existing site.", "Avoid scheduling finished copy/design work or proposing a framework migration.", "State assumptions for missing details while providing an immediately useful plan."]
+  },
+  {
+    "id": "two-views-infeasible-scope",
+    "prompt": "Plan creating and launching a ten-lesson course from scratch. I have only 45 minutes total, no recordings and no sales page. No start date is set. Return dashboard JSON for a Summary / In depth toggle.",
+    "expected_behavior": [
+      "Uses one result: summary is the condensed view and data contains the full plan, without extra answer objects.",
+      "The summary clearly identifies the full launch as infeasible and describes the same feasible subset as the detailed tasks.",
+      "Both views preserve the 45-minute total, unknown dates, planned state, material limits and deferred work; the detail does not invent future capacity."
+    ]
+  },
+  {
+    "id": "summary-only-unknown-timeframe",
+    "prompt": "I want to organise my existing project notes into a shared handover document. I have not decided a deadline or weekly hours. Give me only the Summary view, in plain language.",
+    "expected_behavior": [
+      "Returns a compact overview of the outcome, main stages and one concrete first action, without an unrequested detailed task dump.",
+      "Treats dates and available capacity as unknown; any effort estimates are labelled estimates, not a promised schedule.",
+      "Preserves the existing-notes scope and does not claim that the handover document was created."
+    ]
   }
 ]

@@ -187,6 +187,40 @@ class SkillRelationshipTests(unittest.TestCase):
         self.rejected("project-planner", lambda data: data["tasks"][0].update(milestone_id="missing"), "unknown milestone")
         self.rejected("project-planner", lambda data: data["tasks"][0].update(depends_on=["missing"]), "unknown task")
 
+    def test_research_overview_and_answer_inline_source_ids(self):
+        schema, output = self.fixture("research-brief")
+        output["summary"] = "The supplied options differ. [source-1][source-2]"
+        output["data"]["answer"] = "Compare the supplied cards first. [source-1]"
+        errors = []
+        validate.check_instance(schema, output, Path("response.json"), errors)
+        self.assertEqual(errors, [])
+
+        for location in ("summary", "answer"):
+            with self.subTest(location=location):
+                broken = copy.deepcopy(output)
+                target = broken if location == "summary" else broken["data"]
+                target[location] += " A missing reference. [source-999]"
+                errors = []
+                validate.check_instance(schema, broken, Path("response.json"), errors)
+                self.assertTrue(any("unknown inline source 'source-999'" in error for error in errors), errors)
+
+    def test_research_partial_without_evidence_has_no_invented_citations(self):
+        schema, output = self.fixture("research-brief")
+        output.update(status="partial", summary="Current evidence is unavailable; only a research plan is prepared.", limitations=["No usable sources were supplied or accessed."])
+        output["data"].update(answer="Gather usable source material before making a recommendation.", findings=[], sources=[], conflicts=[], next_actions=["Obtain the source documents."])
+        errors = []
+        validate.check_instance(schema, output, Path("response.json"), errors)
+        self.assertEqual(errors, [])
+        output["summary"] += " Unsupported attribution. [source-1]"
+        errors = []
+        validate.check_instance(schema, output, Path("response.json"), errors)
+        self.assertTrue(any("unknown inline source 'source-1'" in error for error in errors), errors)
+
+    def test_research_conflict_and_action_inline_source_ids(self):
+        for field in ("conflicts", "next_actions"):
+            with self.subTest(field=field):
+                self.rejected("research-brief", lambda data: data[field].append("Check this claim. [source-999]"), "unknown inline source")
+
     def test_planner_dependency_self_cycle_and_order(self):
         self.rejected("project-planner", lambda data: data["tasks"][0].update(depends_on=["t1"]), "cannot depend on itself")
         self.rejected("project-planner", lambda data: data["tasks"][0].update(depends_on=["t2"]), "dependency cycle")
