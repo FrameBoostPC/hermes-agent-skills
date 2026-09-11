@@ -8,7 +8,7 @@ I am launching an AI productivity product for beginners. Create two Instagram po
 
 ## Example response
 
-### For you — guidance, not for publishing
+### User guidance
 
 Purpose: introduce the upcoming product and start a conversation with potential users. These are teaser drafts because the product name and specific features were not supplied. The two posts below are Instagram caption copy; the video block contains only words to say.
 
@@ -48,7 +48,7 @@ Purpose: introduce the upcoming product and start a conversation with potential 
 >
 > What's the one everyday task you'd want help with first?
 
-### Production notes — for you
+### Production notes
 
 - Video: speak directly to camera, with a small pause between the two opening reactions. The spoken text is roughly 100 words, or about 45 seconds at 135 words per minute; check with a read-through.
 - Optional opening overlay: `“Right. What do I do now?”`.

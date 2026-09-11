@@ -2,7 +2,7 @@
 name: idea-to-content
 description: Turn ideas or source material into social content drafts.
 metadata:
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # Idea to Content
@@ -39,10 +39,10 @@ Use supplied facts as supplied facts, not independently verified facts. Do not f
 
 For a normal human-readable answer, make the two audiences explicit:
 
-- **For you — guidance, not for publishing:** at most a few short lines naming the intended purpose, important assumptions, and any missing product detail that affects use. Omit this section when the user requests copy only or there is nothing useful to explain.
+- **User guidance:** at most a few short lines naming the intended purpose, important assumptions, and any missing product detail that affects use. This section is not for publishing. Omit it when the user requests copy only or there is nothing useful to explain.
 - **Content to publish:** label each deliverable by its use, such as `Instagram post 1 — caption to copy` or `Video — words to say`. Put the complete caption or spoken script in its own blockquote or another clearly bounded copy area. Keep creator instructions, angle explanations, duration estimates, and editorial labels outside that area. A quoted prompt inside an educational post is part of the audience-facing copy; make the topic clear in the guidance.
 
-Put optional filming, visuals, and timing in a separate **Production notes — for you** section linked to the relevant deliverable. If alternative hooks were requested or are part of the default pack, label them **Alternative opening lines — choose one**; they are optional publishable lines, not instructions. Explicit requests for only specific drafts override the default hook list. Include the chosen hook and any call to action in the finished draft so the user does not need to assemble it from scattered sections. An Instagram text-post draft is caption copy; any suggested image or overlay is labelled separately.
+Put optional filming, visuals, and timing in a separate **Production notes** section linked to the relevant deliverable. If alternative hooks were requested or are part of the default pack, label them **Alternative opening lines — choose one**; they are optional publishable lines, not instructions. Explicit requests for only specific drafts override the default hook list. Include the chosen hook and any call to action in the finished draft so the user does not need to assemble it from scattered sections. An Instagram text-post draft is caption copy; any suggested image or overlay is labelled separately.
 
 Use the user's requested structure when supplied. See [the readable output example](references/readable-output.md) for a product-launch response with clear copy boundaries; adapt its presentation rather than reusing its wording or facts.
 

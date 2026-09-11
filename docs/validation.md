@@ -1,6 +1,6 @@
 # Validation notes
 
-Date: 2026-09-11. Initial baseline: all skill packages `0.1.0`. Current Idea to Content package: `0.1.2`; other packages remain `0.1.0`. Output contract: `1.0`.
+Date: 2026-09-11. Initial baseline: all skill packages `0.1.0`. Current Idea to Content package: `0.1.3`; other packages remain `0.1.0`. Output contract: `1.0`.
 
 ## Initial local baseline
 
@@ -53,6 +53,8 @@ A separate assistant generated three responses from the updated skill without co
 - A freelancer weekly reset: a lively educational caption containing all three supplied steps. Its dashboard JSON passed the repository output validator; review found no invented results or missing payoff.
 
 The package validator passed three packages, their updated examples, and 24 behavioural case definitions; the skill-creator format check also passed. Validator implementation and schemas were unchanged, so the earlier 18-test regression suite was not rerun for this prose-only revision. The three generated responses remain in ignored `test-results/idea-to-content/social-voice/`. These are local authoring checks, not Hermes execution or audience-performance tests.
+
+Version `0.1.3` is a label-only follow-up: the readable response uses `User guidance` and `Production notes` in place of headings containing `For you`. Instructions and the readable example agree; the output schema is unchanged.
 
 ## Still required in the product environment
 
