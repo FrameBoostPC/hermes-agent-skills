@@ -1,6 +1,8 @@
 # Hermes Agent Skills
 
-Shared skill packages for our Hermes-based agent product. Each skill is a portable folder with instructions, a dashboard output schema, and an example. Package versions are declared in each `SKILL.md`; these are development candidates to test in the target Hermes environment before shipping them to customers.
+Shared skill packages for the Hermes-based agent and dashboard we are building and demonstrating. The paid offer is a course teaching buyers how to recreate the setup and its add-ons. See [project context](docs/project-context.md) for the current business model and division of work.
+
+Each skill is a portable folder with instructions, a dashboard output schema, and an example. Package versions are declared in each `SKILL.md`; these are development candidates to test in the target Hermes environment before including them in course materials.
 
 | Skill | Result | Example request |
 | --- | --- | --- |
@@ -75,7 +77,7 @@ For each skill, run its cases in Hermes with the intended model and tools. Check
 1. Make a focused change to one skill on a `codex/` branch.
 2. Add or update cases for the behaviour being changed; avoid rules that overfit one example.
 3. Run local validation and relevant Hermes cases.
-4. Review the change together before treating it as a customer release.
+4. Review the change together before including it in a course release.
 5. Update the skill version and tag a tested release when its target-environment checks pass.
 
 Keep credentials, personal configuration, customer data, and private outputs outside this repository. Document required capabilities without secret values. See [validation notes](docs/validation.md) for what has actually been checked so far.

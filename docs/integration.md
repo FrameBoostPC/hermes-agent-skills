@@ -1,6 +1,6 @@
 # Dashboard integration
 
-These schemas are our product's proposed output contract, not a built-in Hermes dashboard API. The repository contains skills and validation tooling; connecting them to the existing UI is a separate implementation step.
+These schemas are the proposed output contract for the Hermes setup demonstrated and taught in our course, not a built-in Hermes dashboard API. The repository contains skills and validation tooling; connecting them to the dashboard being developed separately is a separate implementation step.
 
 ## Invoke and display
 
