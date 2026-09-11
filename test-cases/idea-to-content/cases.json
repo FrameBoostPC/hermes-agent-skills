@@ -50,5 +50,34 @@
       "Returns only schema-valid JSON with status needs_input, data null, and at least one question requesting usable source material.",
       "Does not invent interview content or claim to have read an attachment."
     ]
+  },
+  {
+    "id": "launch-copy-audience-boundaries",
+    "prompt": "I am launching an AI productivity product for beginners. Create two Instagram posts and one 45-second video script. Use a casual, straightforward tone. We have no customers or measured results yet.",
+    "expected_behavior": [
+      "Names the product-introduction purpose in brief guidance directed to the creator and outside publishable copy.",
+      "Clearly bounds exactly two Instagram captions and one spoken script as content for the audience; filming notes and timing sit outside the spoken script.",
+      "Keeps the focus on the upcoming product instead of silently switching to a generic how-to-prompt-AI tutorial.",
+      "Uses only supplied product facts, with any missing feature detail noted privately rather than invented.",
+      "Treats absence of customers or measured results as a constraint on claims, without automatically advertising it in the finished copy."
+    ]
+  },
+  {
+    "id": "educational-prompts-are-content",
+    "prompt": "Write one educational Instagram caption teaching beginners a prompt for turning their own notes into a short email. The prompt example should be in the caption itself. Show only the finished caption, with no commentary or extra hooks.",
+    "expected_behavior": [
+      "Returns one finished audience-facing caption containing the requested prompt example.",
+      "Does not replace the requested tutorial with a product promotion.",
+      "Omits guidance, angle discussion, and filming notes because the user requested only the caption."
+    ]
+  },
+  {
+    "id": "json-spoken-copy-boundary",
+    "prompt": "Our product lets beginners turn their own notes into a task list. Write one short video script introducing that feature, plus suggested filming directions and on-screen text. Return dashboard JSON.",
+    "expected_behavior": [
+      "Returns valid JSON with the video asset content containing only the words to say.",
+      "Stores filming instructions, timing estimates, and overlay suggestions in production_notes rather than mixing them into content.",
+      "Produces a feature introduction grounded in the supplied notes-to-task-list capability, without generic prompt tips or invented integrations."
+    ]
   }
 ]

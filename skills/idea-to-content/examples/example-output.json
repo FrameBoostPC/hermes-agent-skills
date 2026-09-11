@@ -16,7 +16,9 @@
       "audience": "New creators who capture ideas between other commitments",
       "goal": "Help viewers save an idea with enough context to develop it later",
       "tone": "Practical, conversational, specific",
-      "platforms": ["platform-neutral"]
+      "platforms": [
+        "platform-neutral"
+      ]
     },
     "selected_angle": {
       "title": "Save the context, not just the topic",
@@ -24,9 +26,18 @@
       "reason": "The user's three-field inbox supplies a small action viewers can try immediately."
     },
     "hooks": [
-      {"id": "hook-1", "text": "A note that says 'make a productivity video' leaves future you a lot of work."},
-      {"id": "hook-2", "text": "Next time a content idea hits, save these three lines."},
-      {"id": "hook-3", "text": "Here is how I would turn 'content planning' into a note I can actually use later."}
+      {
+        "id": "hook-1",
+        "text": "A note that says 'make a productivity video' leaves future you a lot of work."
+      },
+      {
+        "id": "hook-2",
+        "text": "Next time a content idea hits, save these three lines."
+      },
+      {
+        "id": "hook-3",
+        "text": "Here is how I would turn 'content planning' into a note I can actually use later."
+      }
     ],
     "assets": [
       {
@@ -35,12 +46,13 @@
         "format": "video_script",
         "title": "A three-line idea inbox",
         "hook_id": "hook-1",
-        "content": "SPOKEN: A note that says 'make a productivity video' leaves future you a lot of work.\n\nI keep forgetting content ideas when I am out, so here is a simple way to capture more than the topic.\n\nOpen a note and write three lines: the idea, who it helps, and one concrete example.\n\nFor instance: 'An idea inbox for new creators.' Who does it help? Someone thinking of posts between work and the commute. The example? A phone note with these exact three fields.\n\nNow, when you sit down to write, you have an audience and something specific to show. You still need to develop the draft, but you do not have to reconstruct the whole thought.\n\nTry it with the next idea you would normally leave as a two-word note.\n\nON-SCREEN TEXT: Idea / Who it helps / One example",
+        "content": "A note that says 'make a productivity video' leaves future you a lot of work.\n\nI keep forgetting content ideas when I am out, so here is a simple way to capture more than the topic.\n\nOpen a note and write three lines: the idea, who it helps, and one concrete example.\n\nFor instance: 'An idea inbox for new creators.' Who does it help? Someone thinking of posts between work and the commute. The example? A phone note with these exact three fields.\n\nNow, when you sit down to write, you have an audience and something specific to show. You still need to develop the draft, but you do not have to reconstruct the whole thought.\n\nTry it with the next idea you would normally leave as a two-word note.",
         "caption": "Give your next content idea three lines: what it is, who it helps, and one example you can show.",
         "call_to_action": "Try it with the next idea you would normally leave as a two-word note.",
         "production_notes": [
           "Estimated spoken duration: roughly 50–60 seconds at a conversational pace; check with a read-through.",
-          "Record a simple talking-head shot and optionally show the sample phone note; hide unrelated personal notes."
+          "Record a simple talking-head shot and optionally show the sample phone note; hide unrelated personal notes.",
+          "Optional on-screen text: Idea / Who it helps / One example."
         ]
       },
       {

@@ -1,6 +1,6 @@
 # Hermes Agent Skills
 
-Shared skill packages for our Hermes-based agent product. Each skill is a portable folder with instructions, a dashboard output schema, and an example. These are version `0.1.0` development candidates; test them in the target Hermes environment before shipping them to customers.
+Shared skill packages for our Hermes-based agent product. Each skill is a portable folder with instructions, a dashboard output schema, and an example. Package versions are declared in each `SKILL.md`; these are development candidates to test in the target Hermes environment before shipping them to customers.
 
 | Skill | Result | Example request |
 | --- | --- | --- |
@@ -18,6 +18,7 @@ skills/
     SKILL.md
     templates/output.schema.json
     examples/example-output.json
+    references/readable-output.md
   research-brief/
     SKILL.md
     templates/output.schema.json

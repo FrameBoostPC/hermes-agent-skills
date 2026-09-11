@@ -23,7 +23,7 @@ Each response has the same envelope:
 
 The payloads support these views:
 
-- `idea-to-content`: show `data.assets` as editable content cards; link their hooks using `hook_id`. Hide empty hook lists and omit planning displays when the user asks only for drafts. Stable JSON fields need not all be shown in the UI.
+- `idea-to-content`: show `data.assets` as editable content cards; link their hooks using `hook_id`. Make `content` the copyable caption or spoken script. Keep creator guidance, `production_notes`, and internal titles outside the copy area. `call_to_action` identifies text already in the draft; do not append it again. A separate video `caption` is its own copy area. Hide empty hook lists and omit planning displays when the user asks only for drafts. Stable JSON fields need not all be shown in the UI.
 - `research-brief`: show findings with linked source IDs. Label `provided_text` sources as supplied excerpts and `read_url` sources as retrieved pages. Preserve fact/inference/hypothesis labels and limitations.
 - `project-planner`: show milestones and tasks by relative week. Compare planned effort with weekly hours and any one-time total-minute allowance. Dependencies use task IDs. All tasks are proposed with `status: planned`; actual completion belongs to the application's task state.
 

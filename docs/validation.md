@@ -1,8 +1,8 @@
 # Validation notes
 
-Date: 2026-09-11. Skill package versions: `0.1.0`. Output contract: `1.0`.
+Date: 2026-09-11. Initial baseline: all skill packages `0.1.0`. Current Idea to Content package: `0.1.1`; other packages remain `0.1.0`. Output contract: `1.0`.
 
-## Completed locally
+## Initial local baseline
 
 - The skill-creator format validator accepted all three `SKILL.md` packages.
 - `python scripts/validate.py` passed for three packages, three example outputs, and 18 behavioural case definitions.
@@ -29,6 +29,18 @@ Each output was inspected for the behaviour above and then checked with the repo
 The planner originally exposed only a weekly-hours field. Forward testing showed that a one-time allowance could only be expressed in prose. The package now also exposes `time_budget_minutes_total`, the validator enforces both types of limit, and the planner responses were rerun successfully.
 
 The content schema preserves stable envelope and planning fields even when the user asks for drafts only. The UI should hide empty hook lists and avoid displaying planning details the user did not request.
+
+## Idea to Content readability revision
+
+User feedback exposed unclear boundaries between creator guidance and publishable copy, plus a product-launch request being turned into a generic AI tutorial. Version `0.1.1` separates caption/spoken copy from guidance and production notes, preserves the requested content purpose, and updates the JSON example and UI integration guidance without changing the schema.
+
+The local package validator passed all three packages and 21 behavioural case definitions. All 18 validator regression tests passed, and the skill-creator format check accepted the revised package. These structural checks do not judge copy quality or execute all case prompts.
+
+A separate assistant generated a launch response, an explicitly requested educational caption, and a feature-introduction JSON response under the revised instructions. Manual review confirmed clear copy boundaries, preservation of the educational prompt example when requested, and separation of spoken words from filming/overlay notes. The feature-introduction response also passed the repository's output validator. The launch request is included in the readable reference, so that run is an example-following check, not an unseen evaluation.
+
+That launch run unnecessarily repeated the lack of customers/results in promotional copy. The instructions were refined to treat background constraints as limits on claims rather than automatic audience-facing statements.
+
+A further launch variant used a fictional product name, one Instagram caption, and a 30-second video with no confirmed features. That specific request was absent from the reference. Manual review found the requested product introduction, distinct copy boundaries, no invented capabilities or results, and background constraints kept in creator guidance. The script contains 60 spoken words; actual delivery time still requires a read-through. The package/link and skill-format validators passed again after the refinement. All four readability outputs remain in ignored local `test-results/idea-to-content/readability/`; none was executed through Hermes.
 
 ## Still required in the product environment
 
