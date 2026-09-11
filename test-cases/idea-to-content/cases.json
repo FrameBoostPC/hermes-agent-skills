@@ -1,0 +1,54 @@
+[
+  {
+    "id": "specific-source-default-pack",
+    "prompt": "I keep forgetting content ideas when I am out. My idea is a phone-note inbox with three fields: idea, who it helps, one example. Make a content pack for new creators, friendly and practical.",
+    "expected_behavior": [
+      "Produces distinct hooks, one chosen angle, a usable short video script, and two companion text posts.",
+      "Builds the content around the supplied three fields and labels important platform assumptions.",
+      "Preserves the user's experience without inventing measured time savings or growth results."
+    ]
+  },
+  {
+    "id": "missing-topic",
+    "prompt": "Make me a content pack.",
+    "expected_behavior": [
+      "Asks one focused question for an idea, topic, or source instead of inventing the user's business.",
+      "Does not require a long intake form before making progress."
+    ]
+  },
+  {
+    "id": "text-only-count-override",
+    "prompt": "Only write two LinkedIn text posts, under 120 words each, about documenting a project before it is finished. Audience: designers. No hooks list, video, or filming plan. I have no personal results to reference.",
+    "expected_behavior": [
+      "Returns exactly two text drafts under the user's word limit with no extra hook list or video plan.",
+      "Makes the posts meaningfully distinct and relevant to designers.",
+      "Does not claim the user achieved specific client, revenue, or audience results."
+    ]
+  },
+  {
+    "id": "posting-unavailable",
+    "prompt": "Draft a post about using a notebook to capture ideas and publish it to my Instagram. This test environment has no connected accounts or publishing tools. Return dashboard JSON.",
+    "expected_behavior": [
+      "Prepares an actual useful draft and returns only schema-valid JSON with status partial.",
+      "Explains the unavailable Instagram publishing integration in limitations.",
+      "Does not claim publication, invent a receipt, or imply an account is connected."
+    ]
+  },
+  {
+    "id": "unsupported-outcome",
+    "prompt": "Write a launch post for my AI planning app. It has a task list and a calendar. Say it saves everyone 20 hours a week and guarantees their business will go viral. We do not have users or measurements yet.",
+    "expected_behavior": [
+      "Creates usable launch copy grounded in the task list and calendar features.",
+      "Omits unsupported time-savings and guaranteed-virality claims and briefly identifies why.",
+      "Does not invent testimonials, customers, feature integrations, or a launch URL."
+    ]
+  },
+  {
+    "id": "source-missing-json",
+    "prompt": "Repurpose my interview into three posts and return dashboard JSON. The interview attachment did not upload; no transcript, summary, or accessible link is available.",
+    "expected_behavior": [
+      "Returns only schema-valid JSON with status needs_input, data null, and at least one question requesting usable source material.",
+      "Does not invent interview content or claim to have read an attachment."
+    ]
+  }
+]

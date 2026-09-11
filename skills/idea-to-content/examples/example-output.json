@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "skill": "idea-to-content",
+  "status": "ready",
+  "title": "Capture the idea before it disappears",
+  "summary": "Three hooks, a short video script, and two companion posts about keeping a useful content idea inbox.",
+  "assumptions": [
+    "The intended audience is new creators juggling content with other work.",
+    "No platform or commercial offer was specified, so the drafts are platform-neutral and invite a practical action."
+  ],
+  "questions": [],
+  "limitations": [],
+  "data": {
+    "brief": {
+      "source_idea": "User note: I keep forgetting content ideas when I am out. I want to show people a simple idea inbox using phone notes: idea, who it helps, one concrete example.",
+      "audience": "New creators who capture ideas between other commitments",
+      "goal": "Help viewers save an idea with enough context to develop it later",
+      "tone": "Practical, conversational, specific",
+      "platforms": ["platform-neutral"]
+    },
+    "selected_angle": {
+      "title": "Save the context, not just the topic",
+      "takeaway": "Capture an idea, the person it helps, and one example while they are still clear.",
+      "reason": "The user's three-field inbox supplies a small action viewers can try immediately."
+    },
+    "hooks": [
+      {"id": "hook-1", "text": "A note that says 'make a productivity video' leaves future you a lot of work."},
+      {"id": "hook-2", "text": "Next time a content idea hits, save these three lines."},
+      {"id": "hook-3", "text": "Here is how I would turn 'content planning' into a note I can actually use later."}
+    ],
+    "assets": [
+      {
+        "id": "asset-1",
+        "platform": "platform-neutral",
+        "format": "video_script",
+        "title": "A three-line idea inbox",
+        "hook_id": "hook-1",
+        "content": "SPOKEN: A note that says 'make a productivity video' leaves future you a lot of work.\n\nI keep forgetting content ideas when I am out, so here is a simple way to capture more than the topic.\n\nOpen a note and write three lines: the idea, who it helps, and one concrete example.\n\nFor instance: 'An idea inbox for new creators.' Who does it help? Someone thinking of posts between work and the commute. The example? A phone note with these exact three fields.\n\nNow, when you sit down to write, you have an audience and something specific to show. You still need to develop the draft, but you do not have to reconstruct the whole thought.\n\nTry it with the next idea you would normally leave as a two-word note.\n\nON-SCREEN TEXT: Idea / Who it helps / One example",
+        "caption": "Give your next content idea three lines: what it is, who it helps, and one example you can show.",
+        "call_to_action": "Try it with the next idea you would normally leave as a two-word note.",
+        "production_notes": [
+          "Estimated spoken duration: roughly 50–60 seconds at a conversational pace; check with a read-through.",
+          "Record a simple talking-head shot and optionally show the sample phone note; hide unrelated personal notes."
+        ]
+      },
+      {
+        "id": "asset-2",
+        "platform": "platform-neutral",
+        "format": "text_post",
+        "title": "The note you can use later",
+        "hook_id": "hook-2",
+        "content": "Next time a content idea hits, save these three lines:\n\nIdea: What is the point?\nWho it helps: Who would recognise this problem?\nExample: What could I show them?\n\n'Content planning' is a topic.\n\n'A phone-note inbox for new creators, demonstrated with one idea from the commute' gives you a starting point for a draft.\n\nTry the three-line version with one idea in your notes today.",
+        "caption": null,
+        "call_to_action": "Try the three-line version with one idea in your notes today.",
+        "production_notes": []
+      },
+      {
+        "id": "asset-3",
+        "platform": "platform-neutral",
+        "format": "text_post",
+        "title": "Revisit an old idea",
+        "hook_id": null,
+        "content": "Open an old content idea in your notes. Can you still explain who it was for and what example you wanted to use?\n\nIf either detail is missing, add it now. You might discover that one vague topic contains several possible posts.\n\nChoose the one you can illustrate most clearly. Keep the others in the inbox.\n\nWhich detail do your saved ideas usually lose first: the audience, the example, or the point?",
+        "caption": null,
+        "call_to_action": "Which detail do your saved ideas usually lose first: the audience, the example, or the point?",
+        "production_notes": []
+      }
+    ],
+    "review_notes": [
+      "The personal statement about forgetting ideas comes from the user's note.",
+      "The drafts make no measured productivity, revenue, or audience-growth claims."
+    ]
+  }
+}

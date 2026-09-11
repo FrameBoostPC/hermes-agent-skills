@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Idea to Content output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "skill", "status", "title", "summary", "assumptions", "questions", "limitations", "data"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "skill": {"const": "idea-to-content"},
+    "status": {"enum": ["ready", "partial", "needs_input"]},
+    "title": {"type": "string", "minLength": 1},
+    "summary": {"type": "string"},
+    "assumptions": {"$ref": "#/$defs/stringList"},
+    "questions": {"$ref": "#/$defs/stringList"},
+    "limitations": {"$ref": "#/$defs/stringList"},
+    "data": {"anyOf": [{"$ref": "#/$defs/contentPack"}, {"type": "null"}]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "ready"}}},
+      "then": {"properties": {"data": {"$ref": "#/$defs/contentPack"}, "questions": {"maxItems": 0}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "partial"}}},
+      "then": {"properties": {"data": {"$ref": "#/$defs/contentPack"}, "limitations": {"minItems": 1}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "needs_input"}}},
+      "then": {"properties": {"data": {"type": "null"}, "questions": {"minItems": 1}}}
+    }
+  ],
+  "$defs": {
+    "stringList": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "contentPack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["brief", "selected_angle", "hooks", "assets", "review_notes"],
+      "properties": {
+        "brief": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_idea", "audience", "goal", "tone", "platforms"],
+          "properties": {
+            "source_idea": {"type": "string", "minLength": 1},
+            "audience": {"type": "string", "minLength": 1},
+            "goal": {"type": "string", "minLength": 1},
+            "tone": {"type": "string", "minLength": 1},
+            "platforms": {"$ref": "#/$defs/stringList"}
+          }
+        },
+        "selected_angle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["title", "takeaway", "reason"],
+          "properties": {
+            "title": {"type": "string", "minLength": 1},
+            "takeaway": {"type": "string", "minLength": 1},
+            "reason": {"type": "string", "minLength": 1}
+          }
+        },
+        "hooks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "text"],
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "text": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "assets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "platform", "format", "title", "hook_id", "content", "caption", "call_to_action", "production_notes"],
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "platform": {"type": "string", "minLength": 1},
+              "format": {"enum": ["video_script", "text_post", "carousel", "caption", "other"]},
+              "title": {"type": "string", "minLength": 1},
+              "hook_id": {"type": ["string", "null"]},
+              "content": {"type": "string", "minLength": 1},
+              "caption": {"type": ["string", "null"]},
+              "call_to_action": {"type": ["string", "null"]},
+              "production_notes": {"$ref": "#/$defs/stringList"}
+            }
+          }
+        },
+        "review_notes": {"$ref": "#/$defs/stringList"}
+      }
+    }
+  }
+}

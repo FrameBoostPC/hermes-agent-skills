@@ -1,0 +1,32 @@
+[
+  {
+    "id": "two-week-tutoring-page",
+    "prompt": "I want to publish a single page for my maths tutoring in two weeks. I have three hours each week and an existing site builder account. It just needs an enquiry form. Return dashboard JSON.",
+    "expected_behavior": ["Valid project-planner JSON with actionable deliverables and no invented calendar dates.", "Each week's task estimates total no more than 180 minutes.", "Dependencies are valid and all tasks remain planned.", "No payments, ads, or extra product features are added to launch scope."]
+  },
+  {
+    "id": "goal-missing",
+    "prompt": "Make me a plan. Return dashboard JSON.",
+    "expected_behavior": ["Return needs_input with null data and a concise question about the goal.", "Do not invent a business, personal objective, or deadline."]
+  },
+  {
+    "id": "deadline-overload",
+    "prompt": "I need to launch a clothing brand tomorrow, including original designs, manufactured stock, a shop, and a photoshoot. I have two hours total, no stock, and no suppliers. Return dashboard JSON.",
+    "expected_behavior": ["Explain the original launch cannot be completed under those constraints.", "Return partial with a feasible first subset and remaining scope explicitly deferred.", "No claims that manufacturing, supplier contact, or publication happened.", "Total planned effort for the deadline window stays within two hours."]
+  },
+  {
+    "id": "zero-capacity",
+    "prompt": "Plan a portfolio redesign. I have zero hours available this week and next week. Return dashboard JSON.",
+    "expected_behavior": ["Do not allocate positive effort into a zero-hour budget.", "Return partial with an explicit capacity limitation and a decision about time or scope as the first action."]
+  },
+  {
+    "id": "calendar-request-no-tool",
+    "prompt": "Plan my podcast launch and put the tasks in my calendar. No calendar integration is connected. Keep it short.",
+    "expected_behavior": ["Produce a useful concise relative plan.", "Clearly state calendar events have not been created and identify the connection needed for that requested action.", "Do not invent a timezone or appointment times."]
+  },
+  {
+    "id": "respect-existing-progress",
+    "prompt": "My portfolio copy and design are already finished. I have two hours a week to implement it in my existing static site. Plan the remaining work without changing the design or choosing a new framework.",
+    "expected_behavior": ["Focus on implementation, checks, and publishing using the existing site.", "Avoid scheduling finished copy/design work or proposing a framework migration.", "State assumptions for missing details while providing an immediately useful plan."]
+  }
+]
