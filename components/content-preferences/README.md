@@ -1,16 +1,53 @@
 # Content preferences component
 
-A framework-neutral `<content-preferences>` custom element for Idea to Content. Copy this whole folder into the partner's frontend or import its modules. No production npm dependencies, model calls, credentials, account connections, or global profile changes are included. This component is separate from the installable Hermes skill folders.
+A framework-neutral `<content-preferences>` custom element for Idea to Content, plus a local generation prototype. The element owns selectors and input events; the Python server calls a separately configured model and validates its result. Both remain separate from the installable Hermes skill folders. Your partner can reuse the controls and output schema with a different model or their Hermes backend.
 
 ## Run the preview
 
-From the repository root:
+The full preview needs Python 3.10+, the repository's `requirements-dev.txt` dependencies, and a model runtime. The default is OpenAI's open-weight **gpt-oss:20b** served locally by [Ollama](https://ollama.com/library/gpt-oss). The model download is approximately 14 GB and generation speed depends on the machine. ChatGPT itself is a separate hosted product.
+
+With Ollama installed and running, download the model once:
 
 ```sh
-python -m http.server 8765 --bind 127.0.0.1 --directory components/content-preferences
+ollama pull gpt-oss:20b
 ```
 
-Open `http://127.0.0.1:8765/demo.html`. The minimal prototype provides tone buttons, Calm/Balanced/Bold intensity, wording/custom directions, typed commands and optional browser microphone transcription. **Prepare request** creates a copyable Hermes prompt. It does not generate content or call Hermes. Rewriting needs an original draft and the host backend.
+From the repository root, using your activated Python environment:
+
+```sh
+python components/content-preferences/server.py
+```
+
+Open `http://127.0.0.1:8765/demo.html`. Enter a brief, choose the voice, then select **Generate content**. The server runs the actual Idea to Content instructions with the model; the UI shows copyable drafts, with guidance and production notes kept separate. It does not display the technical prompt or raw JSON. The preview calls the model directly rather than running Hermes itself. An ordinary static file server does not provide generation.
+
+On this Windows laptop, [start-demo.ps1](start-demo.ps1) also starts the project-local Ollama runtime if it is stopped. From the repository root run `./components/content-preferences/start-demo.ps1`. It uses `.venv`, optional `local/content-model.json`, and the downloaded runtime/models under ignored `local/`. It does not install or download anything on startup. Close the preview server with Ctrl+C; the background model service can remain available and releases idle model memory automatically.
+
+Generation uses the accepted preference snapshot and original brief. Changing the brief or preferences makes older results visibly out of date and prevents a late response from replacing the current result. Cancel stops the browser waiting and rejects late results; it does not guarantee an upstream model immediately stops computing. The local server accepts one inference at a time and reports when the model is still busy. Requests that fail or return invalid content produce an error, never a substitute example.
+
+## Choose another model later
+
+Copy [model.example.json](model.example.json) to the ignored `local/content-model.json` and change `provider`, `base_url`, and `model`. Start the server with:
+
+```sh
+python components/content-preferences/server.py --config local/content-model.json
+```
+
+Supported providers:
+
+| Provider | Example base URL | How it connects |
+| --- | --- | --- |
+| `ollama` | `http://127.0.0.1:11434` | Appends `/api/chat`; uses the installed model name |
+| `openai-compatible` | `http://127.0.0.1:1234/v1` | Appends `/chat/completions`; requires a compatible endpoint and model |
+
+The model name is configuration, not a skill instruction. Restart the server after changing it. Context length, output limit, timeout, temperature and reasoning settings are also configurable; check the chosen model's support and test output quality after switching. An OpenAI-compatible endpoint does not mean every provider or model supports every setting.
+
+With `thinking: null`, the Ollama adapter selects low reasoning for gpt-oss and leaves other models' reasoning settings alone. `temperature: null` omits that setting for models which do not accept it. Compatible endpoints can choose `token_parameter: "max_tokens"` or `"max_completion_tokens"`. `HERMES_MODEL_CONFIG` selects a configuration file; `HERMES_MODEL_PROVIDER`, `HERMES_MODEL_BASE_URL`, `HERMES_MODEL_NAME` and corresponding setting variables override file values in the server and Windows launcher.
+
+If a hosted endpoint needs credentials, set `api_key_env` to the name of a server-side environment variable and put the key in that environment variable. Never put keys in browser files, request bodies, committed configuration, or the shared repository. Hosted inference needs the provider account and can incur charges; the default local Ollama configuration has no hosted API key or per-request API bill. Local model files belong outside source control.
+
+The prototype binds to `127.0.0.1`, serves only its own UI files, checks request origins and validates outputs against the existing skill schema and semantic checks. It is a local development server, not the partner's authenticated multi-user application. It has no web research tools, publishing, saved profiles or permanent draft storage. Content stays in the current page unless copied; model output is a draft to review.
+
+The backend expects this repository's `skills/idea-to-content` and `scripts/validate.py` paths. Keep the repository checkout intact when running it. Frontend integration can copy only the browser modules/styles; the partner can replace `POST /api/generate` with their Hermes integration. The prototype request contains `brief`, `preferenceContext`, `action`, optional `instruction`, and `previousResult` for rewrites. A successful response contains the validated skill `result` plus `model` and `provider`; failures contain a readable `error`. `GET /api/model` reports configuration and busy status, not proof the model is installed or reachable.
 
 The offline interpreter recognises complete, simple commands such as `Tone: educational`, `Emotional and calm`, `Make this emotional, but keep it subtle`, `Make it a little less intense`, and `Custom: warm, dry humour, no jargon`. Unrecognised, conflicting or compound instructions are reported without partially applying them. For example, `Make it emotional but no slang` requires the Custom voice field or the host interpreter. It is deliberately not a general language model. Existing custom directions survive preset changes; an explicit `Custom:` instruction replaces the previous custom description.
 
@@ -26,7 +63,9 @@ The prototype keeps its layout and styling separate from its behaviour:
 | [controls-template.mjs](controls-template.mjs) | Component markup and visible labels |
 | [controls.mjs](controls.mjs) | Input handling, shared-store binding and speech callbacks |
 | [state.mjs](state.mjs), [intent.mjs](intent.mjs) | Accepted choices, conflict protection and instruction interpretation; no DOM dependency |
-| [demo.html](demo.html), [demo.css](demo.css), [demo.mjs](demo.mjs) | Disposable preview page and copyable prompt; not required by the embedded component |
+| [demo.html](demo.html), [demo.css](demo.css), [demo.mjs](demo.mjs) | Minimal generation preview; not required by the embedded component |
+| [generation-view.mjs](generation-view.mjs) | Safe content rendering and per-asset copy buttons |
+| [server.py](server.py), [model.example.json](model.example.json) | Local model adapter and replaceable configuration; the partner can use their own backend |
 
 For a quick restyle, set CSS variables on the element in your dashboard stylesheet:
 
@@ -53,6 +92,8 @@ To replace the custom element entirely with your partner's UI framework, reuse `
 <script type="module" src="./content-preferences/controls.mjs"></script>
 <content-preferences scope-label="This script"></content-preferences>
 ```
+
+Set `action-label="Generate content"` to rename the action button without changing its request event. The optional boolean `busy` attribute disables new requests while the host is generating; the host clears it when the run ends. The demo owns both attributes. These attributes do not change tone, intensity or wording.
 
 Use one store per editing scope. Every selector view for the same scope must share that store; do not maintain independent button, chat and voice values. `scope-label` is a display label, not an asset identity or a mechanism for loading another asset's saved preferences. The host owns asset IDs, per-user persistence, source facts, run cancellation and results. Changing the label refreshes the display and invalidates pending interpretation; bind the correct store when changing actual scope.
 
@@ -86,7 +127,7 @@ controls.addEventListener('content-request', ({ detail }) => {
 });
 ```
 
-`requestContent('generate' | 'rewrite')` emits one request with a detached state snapshot. Changing selectors alone emits no content request. The built-in parser treats `Make this…` as a rewrite request and `Set the tone…` as a settings update. Preparing a request waits for the component's current instruction to resolve; a completed voice instruction can issue its requested action. Caller metadata cannot override the snapshot, action, scope or preference context. The demo surfaces a missing-original-draft message for rewrites. Any shared-store change marks a previously prepared demo prompt out of date.
+`requestContent('generate' | 'rewrite')` emits one request with a detached state snapshot. Changing selectors alone emits no content request. The built-in parser treats `Make this…` as a rewrite request and `Set the tone…` as a settings update. Preparing a request waits for the component's current instruction to resolve; a completed voice instruction can issue its requested action. Caller metadata cannot override the snapshot, action, scope or preference context. The demo sends a rewrite with its actual previous result and reports a missing draft if none exists. Any shared-store change marks older generated content out of date.
 
 `preferences` returns `{revision, values, fieldRevisions}`. UI `tone` maps to the skill's Writing style; `intensity` maps to Energy. `values` contains `tone`, `intensity`, `wording`, `customVoice`, and optional `secondaryTone`. The current UI offers the first four; hosts can set `secondaryTone` programmatically. Tone, intensity and wording all support deliberately reaffirming the currently selected radio. Zero field revision means an untouched fallback, which the generated request explicitly labels. The request also states that accepted choices supersede older preferences in the brief for the same fields. `setPreferences()` represents deliberate accepted choices. Use a new store with no initial values for untouched defaults. `preferences-change` is also emitted with `status: 'rebound'` and `source: 'binding'` when the component switches stores.
 
@@ -143,6 +184,12 @@ The browser suite additionally needs Playwright available to Node and a browser 
 
 ```sh
 node --test components/content-preferences/browser.test.mjs
+```
+
+Backend tests use a fake model service and do not need a downloaded model:
+
+```sh
+python components/content-preferences/server_test.py -v
 ```
 
 Optionally set `PLAYWRIGHT_MODULE` to an installed Playwright module entry path, `PLAYWRIGHT_CHANNEL` to a locally installed supported channel such as `msedge`, and `CONTROLS_SCREENSHOT` to an output PNG path. The suite starts its own loopback server, uses an isolated headless browser, and injects speech callbacks; it never records microphone audio. Production custom-dashboard integration and actual speech-service transcription still require testing on the partner's machine.

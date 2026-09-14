@@ -22,10 +22,21 @@ content-preferences { margin-top: 20px; }
 .note { margin: 12px 0 0; text-align: center; }
 .request { margin-top: 20px; }
 .request p { color: #a5b2a9; font-size: 13px; line-height: 1.5; }
-.request pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 320px; overflow: auto; padding: 12px; background: #111713; border: 1px solid #354139; border-radius: 6px; font: 12px/1.6 Consolas, monospace; }
+.request [data-error=true] { color: #ffbbb2; }
+.request-actions { display: flex; gap: 8px; }
+.asset { margin-top: 24px; padding-top: 20px; border-top: 1px solid #354139; }
+.asset h3 { margin: 4px 0 12px; font-size: 16px; font-weight: 600; overflow-wrap: anywhere; }
+.asset .asset-kind { margin: 0; font-size: 12px; }
+.asset .content-copy { color: #e8ece9; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; line-height: 1.65; }
+.asset .caption-label { margin: 20px 0 0; color: #e8ece9; font-weight: 600; }
+.request details { margin-top: 20px; color: #a5b2a9; font-size: 13px; line-height: 1.5; }
+.request summary { cursor: pointer; }
+.request li { margin: 8px 0; overflow-wrap: anywhere; }
+.request ul { padding-left: 20px; }
+.request [data-stale=true] { opacity: .65; }
 button { padding: 10px 14px; border: 1px solid #52644b; border-radius: 6px; background: #263422; color: #d5f6a5; font: inherit; font-size: 13px; cursor: pointer; }
 button:disabled { opacity: .5; cursor: not-allowed; }
-textarea:focus-visible, button:focus-visible { outline: 2px solid #d5f6a5; outline-offset: 3px; }
+textarea:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid #d5f6a5; outline-offset: 3px; }
 #copy-status:empty { margin: 0; }
 @media (max-width: 520px) {
   main { padding: 20px 14px; }

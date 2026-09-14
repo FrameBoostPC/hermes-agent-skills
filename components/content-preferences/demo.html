@@ -12,15 +12,18 @@
     <section class="panel" aria-label="Content request">
       <label for="topic">Brief</label>
       <textarea id="topic" rows="3">Write a 45-second video script about how to get good at public speaking, for beginners.</textarea>
-      <content-preferences scope-label="Current brief"></content-preferences>
+      <content-preferences scope-label="Current brief" action-label="Generate content"></content-preferences>
     </section>
-    <p class="note">Preview only · Hermes not connected</p>
+    <p class="note" id="model-info">Loading model settings…</p>
     <section class="request panel" hidden id="request">
-      <h2>Request prepared</h2>
-      <p id="request-info"></p>
-      <pre id="prompt"></pre>
-      <button id="copy" type="button">Copy Hermes prompt</button>
-      <p role="status" id="copy-status"></p>
+      <h2>Your content</h2>
+      <p id="request-info" role="status" aria-live="polite"></p>
+      <div class="request-actions">
+        <button id="cancel" type="button" hidden>Cancel generation</button>
+        <button id="retry" type="button" hidden>Try again</button>
+      </div>
+      <div id="results"></div>
+      <p role="status" id="copy-status" aria-live="polite"></p>
     </section>
   </main>
   <script type="module" src="./demo.mjs"></script>

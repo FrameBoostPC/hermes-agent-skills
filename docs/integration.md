@@ -29,7 +29,7 @@ The payloads support these views:
 
 ## Idea to Content writing-style controls
 
-The skill accepts voice preferences now. The [portable content-preferences component](../components/content-preferences/README.md) implements selectors and a local preview for the separately developed dashboard. It emits preferences and request events; it has no Hermes backend connection. The choices below remain the integration contract, not a Hermes configuration API. Keep the first screen simple: the user's topic, their requested deliverables, and a **Writing style** selector. Put the additional controls under an optional **Customise voice** disclosure.
+The skill accepts voice preferences now. The [portable content-preferences component](../components/content-preferences/README.md) implements selectors and a local generation preview for the separately developed dashboard. It emits preferences and request events. The preview's Python server loads the skill and calls a configurable model directly, initially local gpt-oss:20b through Ollama. The partner can replace that connection with their Hermes backend without changing the skill output schema or shared selector state. The choices below remain the integration contract, not a Hermes configuration API. Keep the first screen simple: the user's topic, their requested deliverables, and a **Writing style** selector. Put the additional controls under an optional **Customise voice** disclosure.
 
 The maintained preset definitions and writing behaviours live in [writing styles](../skills/idea-to-content/references/writing-styles.md). The skill loads that file when drafting or rewriting copy.
 

@@ -16,6 +16,8 @@ Idea to Content supports **Engaging, Educational, Entertaining, Emotional, Profe
 
 Research Brief and Project Planner support **Summary** and **In depth** reading views. Chat defaults to Summary; ask for `In depth only` or `both views` when needed. Dashboard JSON contains a condensed `summary` and complete `data` in the same response, ready for the dashboard's view toggle. Both views retain important limitations and describe the same result.
 
+The [local generation preview](components/content-preferences/README.md#run-the-preview) produces finished Idea to Content drafts using a configurable model. Its initial model is OpenAI's open-weight gpt-oss:20b through Ollama. Model files and private configuration stay in ignored local storage; your partner can select a different model or connect the same UI to Hermes.
+
 ## Structure
 
 ```text
@@ -46,6 +48,10 @@ components/content-preferences/
   demo.html
   demo.css
   demo.mjs
+  generation-view.mjs
+  server.py
+  model.example.json
+  start-demo.ps1
 ```
 
 Each package is independent. Keep links to its resources in `SKILL.md`; Hermes's installer only includes referenced support files. Test cases and developer tooling stay outside installable skill folders. Example outputs are illustrative, not completed work for a customer.

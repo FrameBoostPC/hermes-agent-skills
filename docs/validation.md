@@ -103,9 +103,23 @@ On 2026-09-14, the interruption recovery check found no uncommitted changes; all
 
 After the presentation change, all 19 Node and 17 isolated Edge browser tests passed again. The browser suite confirms the extracted component stylesheet loads, and the desktop preview was visually inspected. The package validator also passed all three skills and 33 case definitions. Speech remains simulated in these checks; Hermes generation and the partner's dashboard were not exercised.
 
+## Local model generation prototype
+
+On 2026-09-14, the preview gained a Python model adapter and now renders actual Idea to Content drafts instead of a copyable prompt. The server loads the maintained skill, writing-style reference and schema, uses the repository's schema/semantic validator, and exposes model/provider configuration independently of the UI. The browser displays copyable asset text and separate guidance/production notes, rejects stale results, and supports cancellation/retry. The underlying preference store, interpreter, skill packages and output schema are unchanged.
+
+All 61 automated checks passed: 19 Node selector checks, 27 isolated Edge browser checks and 15 Python backend checks. The new browser cases use explicitly mocked model responses for content rendering/copy, HTML-as-text handling, errors, missing inputs, cancellation and late responses after brief/preference/scope/store updates. Backend cases cover real HTTP transport to a fake service, provider switching, schema/semantic validation, truncated/malformed output, credential isolation, request origin/body limits and one-run-at-a-time behaviour. These do not establish real compatibility with every alternate provider. Package validation still passes all three skills and 33 case definitions. The Windows launcher's syntax, default startup and effective configuration overrides were also checked.
+
+A portable Ollama 0.34.0 runtime was downloaded from its official release and its SHA-256 checked before extraction. The local gpt-oss:20b model uses MXFP4 weights, approximately 13.79 GB on disk. Runtime files, model weights, private configuration and generated results remain in ignored local storage. The measured machine has 31.5 GiB RAM and an Intel Core Ultra 7 355; Ollama used CPU inference with a 16K context window, low reasoning, 4096-token output limit and temperature 0.5.
+
+The first real UI run generated one 121-word public-speaking video script in 305 seconds, returned HTTP 200, passed output validation and produced no browser script errors. Editorial inspection found numbered/emoji markers in spoken copy and an unsupported automatic-confidence claim. The adapter's final output check was reinforced to apply the skill's existing spoken-copy and factual-boundary instructions.
+
+A second real UI run with the model already loaded returned one 129-word video script in 123 seconds, again with HTTP 200, schema/semantic validation success and no browser script errors. The spoken content no longer contains numbered or emoji markers, and the rendered result was visually checked. It still invents a first-person experience and uses overconfident outcome wording. These runs demonstrate functioning local generation and rendering, not approval of the draft's writing quality or facts. Review output before use; model choice and editorial evaluation remain part of the partner's integration. The two prompts/results, timing records and screenshot remain in ignored `test-results/idea-to-content/local-model/`.
+
+The prototype is a direct model call, not a Hermes runtime test. Live microphone transcription, the partner's dashboard, multiple users, hosted-provider billing and audience performance remain outside these local checks.
+
 ## Still required in the product environment
 
-No callable Hermes installation was found on PATH or at the checked default installation locations. No Hermes installation, model configuration, or customer integration was changed.
+No callable Hermes installation was found on PATH or at the checked default installation locations. No Hermes installation, Hermes model configuration, or customer integration was changed.
 
 Before a customer release:
 

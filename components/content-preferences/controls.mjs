@@ -3,7 +3,7 @@ import { interpretPreferenceText, buildPreferenceContext } from './intent.mjs';
 import { controlsTemplate } from './controls-template.mjs';
 
 export class ContentPreferences extends HTMLElement {
-  static get observedAttributes() { return ['scope-label']; }
+  static get observedAttributes() { return ['scope-label', 'action-label', 'busy']; }
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -27,6 +27,7 @@ export class ContentPreferences extends HTMLElement {
 
   disconnectedCallback() { this.cancelVoice(); this._inputToken++; this._pendingInput = null; this._unsubscribe?.(); this._unsubscribe = null; }
   attributeChangedCallback(name, previous, next) {
+    if (name === 'action-label' || name === 'busy') { this.syncRequestAvailability(); return; }
     if (previous !== next) { this.cancelVoice(); this._inputToken++; this._pendingInput = null; this.sync(); }
   }
 
@@ -102,6 +103,7 @@ export class ContentPreferences extends HTMLElement {
 
   requestContent(action = 'generate', extra = {}) {
     if (!['generate', 'rewrite'].includes(action)) throw new Error('Unsupported content action.');
+    if (this.hasAttribute('busy')) { this.message('Content is being generated. Cancel it or wait for the result.'); return false; }
     if (this._pendingInput || (this._voiceActive && extra.source !== 'voice')) {
       this.message('Finish the current instruction before preparing a request.');
       return false;
@@ -158,7 +160,12 @@ export class ContentPreferences extends HTMLElement {
     root.querySelector('#current').textContent = this.describe();
     this.syncRequestAvailability();
   }
-  syncRequestAvailability() { const button = this.shadowRoot.querySelector('#prepare'); if (button) button.disabled = Boolean(this._pendingInput || this._voiceActive); }
+  syncRequestAvailability() {
+    const button = this.shadowRoot.querySelector('#prepare');
+    if (!button) return;
+    button.disabled = Boolean(this._pendingInput || this._voiceActive || this.hasAttribute('busy'));
+    button.textContent = this.getAttribute('action-label') || 'Prepare request';
+  }
   describe() { const v = this.preferences.values; return [v.tone, v.intensity, v.wording].map(x => x[0].toUpperCase() + x.slice(1)).join(' · '); }
   message(text, error = false) { const el = this.shadowRoot.querySelector('.status'); if (el) { el.textContent = text; el.dataset.error = String(error); } }
 

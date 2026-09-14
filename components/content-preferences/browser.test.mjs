@@ -7,9 +7,20 @@ import { pathToFileURL } from 'node:url';
 
 const modulePath = process.env.PLAYWRIGHT_MODULE || 'playwright';
 const { chromium } = await import(isAbsolute(modulePath) ? pathToFileURL(modulePath).href : modulePath);
-const files = new Set(['demo.html', 'demo.css', 'demo.mjs', 'controls.mjs', 'controls-template.mjs', 'controls.css', 'state.mjs', 'intent.mjs']);
+const files = new Set(['demo.html', 'demo.css', 'demo.mjs', 'generation-view.mjs', 'controls.mjs', 'controls-template.mjs', 'controls.css', 'state.mjs', 'intent.mjs']);
+// Model fixtures exercise the UI only; these are not real inference results.
+const example = JSON.parse(await readFile(new URL('../../skills/idea-to-content/examples/example-output.json', import.meta.url), 'utf8'));
+const fixture = { result: example, model: 'test-model', provider: 'test-provider' };
+const generationCalls = [];
 const server = createServer(async (req, res) => {
   const file = new URL(req.url, 'http://localhost').pathname.slice(1) || 'demo.html';
+  if (file === 'api/model') { res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify({ model: fixture.model, provider: fixture.provider })); return; }
+  if (file === 'api/generate') {
+    let body = '';
+    for await (const chunk of req) body += chunk;
+    generationCalls.push(JSON.parse(body));
+    res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(fixture)); return;
+  }
   if (!files.has(file)) { res.writeHead(404).end(); return; }
   try { res.setHeader('Content-Type', file.endsWith('.html') ? 'text/html' : file.endsWith('.css') ? 'text/css' : 'text/javascript'); res.end(await readFile(new URL(file, import.meta.url))); }
   catch { res.writeHead(500).end(); }
@@ -38,17 +49,19 @@ try {
     await page.waitForFunction(() => document.querySelector('content-preferences').preferences.values.tone === 'emotional');
     assert.equal(await page.getByRole('radio', { name: 'Calm', exact: true }).isChecked(), true);
     assert.equal(await page.evaluate(() => requests.length), 0);
-    await page.getByRole('button', { name: 'Prepare request' }).click();
+    await page.getByRole('button', { name: 'Generate content' }).click();
     assert.equal(await page.evaluate(() => requests.length), 1);
-    assert.match(await page.locator('#prompt').textContent(), /Writing style: emotional/);
+    await page.waitForFunction(() => document.querySelector('#request-info').textContent === 'Ready.');
+    assert.match(generationCalls.at(-1).preferenceContext, /Writing style: emotional/);
+    assert.equal(await page.locator('#results .content-copy').first().textContent(), example.data.assets[0].content);
   });
 
-  await test('custom requirements survive preset changes and old prompts become stale', async () => {
+  await test('custom requirements survive preset changes and old content becomes stale', async () => {
     await page.getByText('Customise wording', { exact: true }).click();
     await page.getByLabel('Custom voice or extra wording').fill('no slang');
     await page.getByRole('radio', { name: 'Professional', exact: true }).check();
     assert.equal(await page.getByLabel('Custom voice or extra wording').inputValue(), 'no slang');
-    assert.equal(await page.getByRole('button', { name: 'Copy Hermes prompt' }).isDisabled(), true);
+    assert.equal(await page.getByRole('button', { name: 'Copy video script' }).isDisabled(), true);
   });
 
   await test('unsupported compound commands do not partially apply', async () => {
@@ -79,7 +92,9 @@ try {
     assert.equal(await page.getByRole('radio', { name: 'Emotional', exact: true }).isChecked(), true);
     assert.equal(await page.getByRole('radio', { name: 'Calm', exact: true }).isChecked(), true);
     assert.equal(await page.evaluate(() => requests[1].action), 'rewrite');
-    assert.match(await page.locator('#request-info').textContent(), /no generated draft to rewrite/);
+    await page.waitForFunction(() => document.querySelector('#request-info').textContent === 'Ready.');
+    assert.equal(generationCalls.at(-1).action, 'rewrite');
+    assert.deepEqual(generationCalls.at(-1).previousResult, example);
   });
 
   await test('reaffirming a selected radio protects it from older voice input', async () => {
@@ -98,6 +113,7 @@ try {
     await page.waitForFunction(() => window.requests.length === 3);
     await page.evaluate(() => { speechCallbacks.onFinal('Generate'); speechCallbacks.onEnd(); });
     assert.equal(await page.evaluate(() => requests.length), 3);
+    await page.waitForFunction(() => document.querySelector('#request-info').textContent === 'Ready.');
   });
 
   await test('cancelled async voice interpretation cannot apply settings or request content', async () => {
@@ -186,7 +202,7 @@ try {
     await primary.getByRole('button', { name: 'Apply instruction' }).click();
     await page.waitForFunction(() => document.querySelector('#mirror-controls').preferences.values.tone === 'professional');
     assert.equal(await mirror.getByRole('radio', { name: 'Professional', exact: true }).isChecked(), true);
-    await primary.getByRole('button', { name: 'Prepare request' }).click();
+    await primary.getByRole('button', { name: 'Generate content' }).click();
     await page.evaluate(() => document.querySelector('#primary-controls').store.apply({ wording: 'plain', intensity: 'bold', customVoice: 'no slang' }, { source: 'voice' }));
     for (const control of [primary, mirror]) {
       assert.equal(await control.getByRole('radio', { name: 'Bold', exact: true }).isChecked(), true);
@@ -194,7 +210,7 @@ try {
       assert.equal(await control.locator('#custom').inputValue(), 'no slang');
       assert.equal(await control.locator('#current').textContent(), 'Professional · Bold · Plain');
     }
-    assert.equal(await page.getByRole('button', { name: 'Copy Hermes prompt' }).isDisabled(), true);
+    assert.equal(await page.locator('#results').getAttribute('data-stale'), 'true');
     await page.evaluate(() => document.querySelector('#mirror-controls').requestContent('generate', { state: { values: { tone: 'emotional' } }, preferenceContext: 'stale override', action: 'rewrite', scope: 'wrong scope' }));
     const request = await page.evaluate(() => requests.at(-1));
     assert.equal(request.state.values.tone, 'professional');
@@ -212,14 +228,14 @@ try {
       control.interpretText = () => new Promise(resolve => { window.resolvePending = resolve; });
       window.pendingResult = control.submitInstruction('Polished', { source: 'voice' });
     });
-    assert.equal(await primary.getByRole('button', { name: 'Prepare request' }).isDisabled(), true);
+    assert.equal(await primary.getByRole('button', { name: 'Generate content' }).isDisabled(), true);
     assert.equal(await page.evaluate(() => document.querySelector('#primary-controls').requestContent()), false);
     await primary.getByRole('radio', { name: 'Plain', exact: true }).click();
     await page.evaluate(() => resolvePending({ patch: { wording: 'polished' }, action: 'rewrite' }));
     assert.equal(await page.evaluate(async () => (await pendingResult).status), 'conflict');
     assert.equal(await primary.getByRole('radio', { name: 'Plain', exact: true }).isChecked(), true);
     assert.equal(await mirror.locator('input[name=wording][value=plain]').isChecked(), true);
-    assert.equal(await primary.getByRole('button', { name: 'Prepare request' }).isEnabled(), true);
+    assert.equal(await primary.getByRole('button', { name: 'Generate content' }).isEnabled(), true);
     await page.evaluate(() => { document.querySelector('#primary-controls').interpretText = realInterpreter; });
   });
 
@@ -265,6 +281,125 @@ try {
     });
     assert.equal(await mirror.getByRole('radio', { name: 'Emotional', exact: true }).isChecked(), true);
     assert.equal(await mirror.getByRole('radio', { name: 'Balanced', exact: true }).isChecked(), true);
+  });
+
+  const freshDemo = async () => {
+    await page.reload();
+    await page.waitForFunction(() => Boolean(document.querySelector('content-preferences')?.shadowRoot?.querySelector('#prepare')));
+  };
+  await test('content and captions render as safe text and copy only the actual asset', async () => {
+    await freshDemo();
+    const content = '<img src=x onerror="window.injected=true">\nOne small step.\nTry it today.';
+    const payload = structuredClone(fixture);
+    payload.result.data.assets[0].content = content;
+    payload.result.data.assets[0].call_to_action = 'Try it today.';
+    await page.route('**/api/generate', route => route.fulfill({ json: payload }));
+    await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async text => { window.copiedContent = text; } } }));
+    await page.getByRole('button', { name: 'Generate content' }).click();
+    await page.waitForFunction(() => document.querySelector('#request-info').textContent === 'Ready.');
+    assert.equal(await page.locator('#results .content-copy').first().textContent(), content);
+    assert.equal(await page.locator('#results img').count(), 0);
+    assert.equal(await page.evaluate(() => Boolean(window.injected)), false);
+    assert.equal(await page.locator('#prompt').count(), 0);
+    assert.equal(await page.locator('#results details').first().getAttribute('open'), null);
+    await page.getByRole('button', { name: 'Copy video script' }).click();
+    assert.equal(await page.evaluate(() => copiedContent), content);
+    await page.getByRole('button', { name: 'Copy caption', exact: true }).click();
+    assert.equal(await page.evaluate(() => copiedContent), payload.result.data.assets[0].caption);
+    await page.unroute('**/api/generate');
+  });
+
+  await test('server errors offer retry and recover with real response content', async () => {
+    await freshDemo();
+    let attempts = 0;
+    await page.route('**/api/generate', route => ++attempts === 1
+      ? route.fulfill({ status: 503, json: { error: 'Local model is unavailable.' } })
+      : route.fulfill({ json: fixture }));
+    await page.getByRole('button', { name: 'Generate content' }).click();
+    await page.getByRole('button', { name: 'Try again' }).waitFor();
+    assert.equal(await page.locator('#request-info').textContent(), 'Local model is unavailable.');
+    assert.equal(await page.locator('#results .asset').count(), 0);
+    await page.getByRole('button', { name: 'Try again' }).click();
+    await page.waitForFunction(() => document.querySelector('#request-info').textContent === 'Ready.');
+    assert.equal(attempts, 2);
+    assert.equal(await page.locator('#results .asset').count(), 3);
+    await page.unroute('**/api/generate');
+  });
+
+  await test('invalid model responses are rejected without inventing content', async () => {
+    await freshDemo();
+    await page.route('**/api/generate', route => route.fulfill({ json: { ...fixture, result: { content: 'Unsupported answer' } } }));
+    await page.getByRole('button', { name: 'Generate content' }).click();
+    await page.getByRole('button', { name: 'Try again' }).waitFor();
+    assert.match(await page.locator('#request-info').textContent(), /invalid content result/);
+    assert.equal(await page.locator('#results').textContent(), '');
+    await page.unroute('**/api/generate');
+  });
+
+  await test('missing original drafts and needs-input results remain actionable', async () => {
+    await freshDemo();
+    await page.getByLabel('Say it or type it').fill('Rewrite this');
+    await page.getByRole('button', { name: 'Apply instruction' }).click();
+    await page.waitForFunction(() => document.querySelector('#request-info').textContent.includes('No generated draft'));
+    const payload = { ...fixture, result: { ...example, status: 'needs_input', data: null, questions: ['Who is the audience?'] } };
+    await page.route('**/api/generate', route => route.fulfill({ json: payload }));
+    await page.getByRole('button', { name: 'Generate content' }).click();
+    await page.getByText('Who is the audience?', { exact: true }).waitFor();
+    assert.equal(await page.locator('#results .asset').count(), 0);
+    await page.unroute('**/api/generate');
+  });
+
+  const deferGeneration = async () => page.evaluate(() => {
+    const originalFetch = window.fetch;
+    window.pendingGeneration = [];
+    window.fetch = (url, options) => url === '/api/generate'
+      ? new Promise(resolve => pendingGeneration.push({ resolve, signal: options.signal, body: JSON.parse(options.body) }))
+      : originalFetch(url, options);
+  });
+  const finishGeneration = async (index, content) => {
+    const payload = structuredClone(fixture);
+    payload.result.data.assets[0].content = content;
+    await page.evaluate(({ index, payload }) => pendingGeneration[index].resolve(new Response(JSON.stringify(payload), { headers: { 'Content-Type': 'application/json' } })), { index, payload });
+  };
+  await test('cancelling stops waiting and ignores a response even if transport ignores abort', async () => {
+    await freshDemo();
+    await deferGeneration();
+    await page.getByRole('button', { name: 'Generate content' }).click();
+    assert.equal(await page.getByRole('button', { name: 'Generate content' }).isDisabled(), true);
+    await page.getByRole('button', { name: 'Cancel generation' }).click();
+    assert.equal(await page.evaluate(() => pendingGeneration[0].signal.aborted), true);
+    await finishGeneration(0, 'Cancelled response');
+    assert.equal(await page.locator('#results .asset').count(), 0);
+    assert.match(await page.locator('#request-info').textContent(), /Stopped waiting/);
+    assert.equal(await page.getByRole('button', { name: 'Generate content' }).isEnabled(), true);
+  });
+
+  for (const change of ['brief', 'preferences', 'scope', 'store']) {
+    await test(`a changed ${change} retires generation and late content cannot replace the newer result`, async () => {
+      await freshDemo();
+      await deferGeneration();
+      await page.getByRole('button', { name: 'Generate content' }).click();
+      if (change === 'brief') await page.getByLabel('Brief', { exact: true }).fill('How to speak confidently to a new team');
+      else if (change === 'preferences') await page.getByRole('radio', { name: 'Emotional', exact: true }).check();
+      else if (change === 'scope') await page.evaluate(() => document.querySelector('content-preferences').setAttribute('scope-label', 'Another draft'));
+      else await page.evaluate(async () => {
+        const { createPreferenceStore } = await import('/state.mjs');
+        document.querySelector('content-preferences').store = createPreferenceStore({ tone: 'professional' });
+      });
+      assert.equal(await page.evaluate(() => pendingGeneration[0].signal.aborted), true);
+      await page.getByRole('button', { name: 'Generate content' }).click();
+      await finishGeneration(1, 'Newer content');
+      await page.waitForFunction(() => document.querySelector('#request-info').textContent === 'Ready.');
+      await finishGeneration(0, 'Stale content');
+      assert.equal(await page.locator('#results .content-copy').first().textContent(), 'Newer content');
+      assert.equal(await page.getByRole('button', { name: 'Copy video script' }).isEnabled(), true);
+    });
+  }
+
+  await test('generated content fits the mobile view with no browser script errors', async () => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    assert.deepEqual(errors, []);
   });
 
   if (process.env.CONTROLS_SCREENSHOT) {
