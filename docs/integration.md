@@ -29,7 +29,7 @@ The payloads support these views:
 
 ## Idea to Content writing-style controls
 
-The skill accepts voice preferences now; the controls below are a handoff specification for the separately developed dashboard. They are not an implemented UI or a Hermes configuration API. Keep the first screen simple: the user's topic, their requested deliverables, and a **Writing style** selector. Put the additional controls under an optional **Customise voice** disclosure.
+The skill accepts voice preferences now. The [portable content-preferences component](../components/content-preferences/README.md) implements selectors and a local preview for the separately developed dashboard. It emits preferences and request events; it has no Hermes backend connection. The choices below remain the integration contract, not a Hermes configuration API. Keep the first screen simple: the user's topic, their requested deliverables, and a **Writing style** selector. Put the additional controls under an optional **Customise voice** disclosure.
 
 The maintained preset definitions and writing behaviours live in [writing styles](../skills/idea-to-content/references/writing-styles.md). The skill loads that file when drafting or rewriting copy.
 
@@ -64,7 +64,7 @@ Applying a new voice to existing copy requires a new generation; this differs fr
 
 ## Text, buttons and voice share one request
 
-Users must be able to move between typing, clicking and speaking within the same task. Keep one application-owned brief and preference state for that task. All three inputs update it, and the dashboard displays the accepted values. Hermes receives the resolved brief rather than three competing sets of instructions. This is a proposed integration design, not an implemented voice router or a new skill output schema.
+Users must be able to move between typing, clicking and speaking within the same task. Keep one application-owned brief and preference state for that task. All three inputs update it, and the dashboard displays the accepted values. Hermes receives the resolved brief rather than three competing sets of instructions. The portable component implements shared writing-preference state, simple command interpretation and optional speech capture. The broader routing design below still requires the partner's application, speech service and Hermes backend; it is not a new skill output schema.
 
 ### Route all inputs to the same actions
 

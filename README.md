@@ -12,7 +12,7 @@ Each skill is a portable folder with instructions, a dashboard output schema, an
 
 The skills return readable answers by default. Add `Return dashboard JSON` to request the structured result defined in that skill's `templates/output.schema.json`. See [dashboard integration](docs/integration.md) for status meanings and application responsibilities.
 
-Idea to Content supports **Engaging, Educational, Entertaining, Emotional, Professional, and Custom** writing styles. You can combine a primary style with one secondary influence and choose energy and wording, or describe the voice naturally. For example: `/idea-to-content Write a 45-second script about public speaking. Style: Engaging + Educational. Energy: Bold. Wording: Conversational. No slang.` It drafts immediately when no style is supplied. The [integration guide](docs/integration.md#idea-to-content-writing-style-controls) specifies the future dashboard selector and per-asset voice rewrites; the UI is built separately.
+Idea to Content supports **Engaging, Educational, Entertaining, Emotional, Professional, and Custom** writing styles. You can combine a primary style with one secondary influence and choose energy and wording, or describe the voice naturally. For example: `/idea-to-content Write a 45-second script about public speaking. Style: Engaging + Educational. Energy: Bold. Wording: Conversational. No slang.` It drafts immediately when no style is supplied. A [portable selector component and local preview](components/content-preferences/README.md) implement tone/intensity controls, simple typed instructions and optional microphone input. The partner connects it to the custom dashboard and agent using the [integration guide](docs/integration.md#idea-to-content-writing-style-controls).
 
 Research Brief and Project Planner support **Summary** and **In depth** reading views. Chat defaults to Summary; ask for `In depth only` or `both views` when needed. Dashboard JSON contains a condensed `summary` and complete `data` in the same response, ready for the dashboard's view toggle. Both views retain important limitations and describe the same result.
 
@@ -37,6 +37,12 @@ skills/
     examples/example-output.json
 test-cases/<skill-name>/cases.json
 scripts/validate.py
+components/content-preferences/
+  controls.mjs
+  state.mjs
+  intent.mjs
+  demo.html
+  demo.mjs
 ```
 
 Each package is independent. Keep links to its resources in `SKILL.md`; Hermes's installer only includes referenced support files. Test cases and developer tooling stay outside installable skill folders. Example outputs are illustrative, not completed work for a customer.
@@ -55,7 +61,7 @@ hermes skills list
 
 Start a new Hermes session and invoke a skill using a request from the table. For a manual transfer, copy the complete skill folders into the active Hermes profile's skills directory (the default is `~/.hermes/skills/`), then start a new session. Use a development profile so testing does not change a customer installation.
 
-Content drafting and planning need no connected external services. Current web research needs working search/page-reading tools; without them the research skill reports its limits and can use supplied text. Skills do not install dependencies or connect accounts. These packages do not include a publisher, calendar scheduler, video renderer, or dashboard application.
+Content drafting and planning need no connected external services. Current web research needs working search/page-reading tools; without them the research skill reports its limits and can use supplied text. Skills do not install dependencies or connect accounts. These packages do not include a publisher, calendar scheduler, video renderer, or complete dashboard application. The separate selector component is a frontend building block and is not installed with the skills.
 
 ## Validate and test
 

@@ -83,6 +83,14 @@ Package validation passed all three packages, their examples, and 33 case defini
 
 The editorial direction was checked against [YouTube's Shorts creator discussion](https://blog.youtube/creator-and-artist-stories/youtube-shorts-deep-dive/) and [official Shorts discovery guidance](https://support.google.com/youtube/answer/11914225?co=YOUTUBE._YTVideoType%3Dshorts&hl=en). These support immediate audience interest, concise storytelling and attention to observed viewer response. They do not establish a universal script formula or prove that these drafts will go viral.
 
+## Portable selector component
+
+On 2026-09-14, `components/content-preferences/` added a framework-neutral custom element, a preference store, a conservative offline instruction interpreter, an optional browser speech adapter and a local preview. The preview prepares a Hermes prompt and never claims to generate content. The existing skill packages and JSON output schemas are unchanged. Broader voice understanding, actual agent generation, permanent profiles and multi-asset application state still belong to the partner's integration.
+
+Fourteen Node checks passed for the store and interpreter. Twelve isolated browser checks passed in headless Microsoft Edge through Playwright: button/text synchronisation, settings versus generation, custom requirements, unsupported compound requests, stale voice conflicts, completed-utterance deduplication, explicit same-value choices, manual transcript submission, cancelled asynchronous interpretation, scope display, failing speech adapters, final-segment aggregation, unavailable microphones and mobile layout. Some tests cover several related behaviours. The rendered desktop preview was also inspected. The initially attempted bundled Chromium executable was absent; the suite used the already installed Edge browser without installing another browser.
+
+All speech events in these checks were supplied by test adapters or a mock recognition class. No real microphone audio, remote speech service, live Hermes connection or partner dashboard was tested. Browser microphone support is capability-dependent and has a visible fallback. The state/interpreter tests require only Node; the browser suite additionally requires Playwright and a supported installed browser. Package/example validation still passes for all three skills and 33 case definitions.
+
 ## Still required in the product environment
 
 No callable Hermes installation was found on PATH or at the checked default installation locations. No Hermes installation, model configuration, or customer integration was changed.
