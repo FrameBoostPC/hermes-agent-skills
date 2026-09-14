@@ -1,8 +1,7 @@
 // A deliberately small offline command parser. Hosts can inject a model-backed
 // interpreter for unrestricted language without changing the component's store.
-const TONES = ['engaging', 'educational', 'entertaining', 'emotional', 'professional', 'custom'];
-const INTENSITIES = ['calm', 'balanced', 'bold'];
-const WORDINGS = ['plain', 'conversational', 'polished'];
+import { PRESETS } from './state.mjs';
+const { tones: TONES, intensities: INTENSITIES, wordings: WORDINGS } = PRESETS;
 
 export function interpretPreferenceText(input, values) {
   const text = String(input).trim();
@@ -52,6 +51,7 @@ function unsupported() {
 
 export function buildPreferenceContext(state) {
   const labels = { tone: 'Writing style', intensity: 'Energy', wording: 'Wording', secondaryTone: 'Secondary style', customVoice: 'Additional voice direction' };
-  return Object.entries(labels).filter(([key]) => state.values[key] !== null && state.values[key] !== '')
-    .map(([key, label]) => `${label}: ${state.values[key]}${state.fieldRevisions[key] === 0 ? ' (fallback preference; explicit brief instructions take priority)' : ''}`).join('\n');
+  const directions = 'Resolved current writing preferences follow. Deliberately selected fields remain authoritative until the user updates them; they supersede older choices in the brief or conversation for those same fields. Only untouched fallback preferences yield to specific brief instructions. Preserve the topic, facts and unrelated requirements.';
+  return [directions, ...Object.entries(labels).filter(([key]) => state.values[key] !== null && state.values[key] !== '')
+    .map(([key, label]) => `${label}: ${state.values[key]}${state.fieldRevisions[key] === 0 ? ' (fallback preference; explicit brief instructions take priority)' : ''}`)].join('\n');
 }

@@ -157,6 +157,115 @@ try {
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     assert.deepEqual(errors, []);
   });
+  await page.setViewportSize({ width: 1280, height: 1050 });
+  await page.reload();
+  await page.waitForFunction(() => Boolean(document.querySelector('content-preferences')?.shadowRoot?.querySelector('#prepare')));
+  await page.evaluate(() => {
+    const first = document.querySelector('content-preferences');
+    first.id = 'primary-controls';
+    const mirror = document.createElement('content-preferences');
+    mirror.id = 'mirror-controls';
+    mirror.store = first.store;
+    document.body.append(mirror);
+    window.requests = [];
+    for (const control of [first, mirror]) control.addEventListener('content-request', event => requests.push(event.detail));
+  });
+  const primary = page.locator('#primary-controls');
+  const mirror = page.locator('#mirror-controls');
+
+  await test('multiple views and outgoing requests agree after button, text, voice and direct store changes', async () => {
+    await primary.getByRole('radio', { name: 'Educational', exact: true }).check();
+    assert.equal(await mirror.getByRole('radio', { name: 'Educational', exact: true }).isChecked(), true);
+    await page.evaluate(async () => {
+      await document.querySelector('#mirror-controls').submitInstruction('Emotional and calm', { source: 'voice', eventId: 'shared-voice' });
+    });
+    assert.equal(await primary.getByRole('radio', { name: 'Emotional', exact: true }).isChecked(), true);
+    assert.equal(await primary.getByRole('radio', { name: 'Calm', exact: true }).isChecked(), true);
+    await primary.getByLabel('Say it or type it').fill('Tone: professional');
+    await primary.getByRole('button', { name: 'Apply instruction' }).click();
+    await page.waitForFunction(() => document.querySelector('#mirror-controls').preferences.values.tone === 'professional');
+    assert.equal(await mirror.getByRole('radio', { name: 'Professional', exact: true }).isChecked(), true);
+    await primary.getByRole('button', { name: 'Prepare request' }).click();
+    await page.evaluate(() => document.querySelector('#primary-controls').store.apply({ wording: 'plain', intensity: 'bold', customVoice: 'no slang' }, { source: 'voice' }));
+    for (const control of [primary, mirror]) {
+      assert.equal(await control.getByRole('radio', { name: 'Bold', exact: true }).isChecked(), true);
+      assert.equal(await control.locator('input[name=wording][value=plain]').isChecked(), true);
+      assert.equal(await control.locator('#custom').inputValue(), 'no slang');
+      assert.equal(await control.locator('#current').textContent(), 'Professional · Bold · Plain');
+    }
+    assert.equal(await page.getByRole('button', { name: 'Copy Hermes prompt' }).isDisabled(), true);
+    await page.evaluate(() => document.querySelector('#mirror-controls').requestContent('generate', { state: { values: { tone: 'emotional' } }, preferenceContext: 'stale override', action: 'rewrite', scope: 'wrong scope' }));
+    const request = await page.evaluate(() => requests.at(-1));
+    assert.equal(request.state.values.tone, 'professional');
+    assert.equal(request.action, 'generate');
+    assert.match(request.preferenceContext, /Writing style: professional/);
+    assert.match(request.preferenceContext, /supersede older choices/);
+    assert.notEqual(request.scope, 'wrong scope');
+  });
+
+  await test('reaffirming wording blocks delayed speech and requests wait for interpretation', async () => {
+    await primary.getByText('Customise wording', { exact: true }).click();
+    await page.evaluate(() => {
+      const control = document.querySelector('#primary-controls');
+      window.realInterpreter = control.interpretText;
+      control.interpretText = () => new Promise(resolve => { window.resolvePending = resolve; });
+      window.pendingResult = control.submitInstruction('Polished', { source: 'voice' });
+    });
+    assert.equal(await primary.getByRole('button', { name: 'Prepare request' }).isDisabled(), true);
+    assert.equal(await page.evaluate(() => document.querySelector('#primary-controls').requestContent()), false);
+    await primary.getByRole('radio', { name: 'Plain', exact: true }).click();
+    await page.evaluate(() => resolvePending({ patch: { wording: 'polished' }, action: 'rewrite' }));
+    assert.equal(await page.evaluate(async () => (await pendingResult).status), 'conflict');
+    assert.equal(await primary.getByRole('radio', { name: 'Plain', exact: true }).isChecked(), true);
+    assert.equal(await mirror.locator('input[name=wording][value=plain]').isChecked(), true);
+    assert.equal(await primary.getByRole('button', { name: 'Prepare request' }).isEnabled(), true);
+    await page.evaluate(() => { document.querySelector('#primary-controls').interpretText = realInterpreter; });
+  });
+
+  await test('replacing the active store synchronises controls and invalidates old pending input', async () => {
+    await page.evaluate(async () => {
+      const { createPreferenceStore } = await import('/state.mjs');
+      const control = document.querySelector('#primary-controls');
+      window.oldStore = control.store;
+      control.interpretText = () => new Promise(resolve => { window.resolveOldScope = resolve; });
+      window.oldScopeResult = control.submitInstruction('Emotional', { source: 'text' });
+      control.store = createPreferenceStore({ tone: 'educational', intensity: 'calm', wording: 'polished' });
+      resolveOldScope({ patch: { tone: 'emotional' }, action: 'rewrite' });
+    });
+    assert.equal(await page.evaluate(async () => (await oldScopeResult).status), 'superseded');
+    assert.equal(await primary.locator('#current').textContent(), 'Educational · Calm · Polished');
+    await page.evaluate(() => oldStore.apply({ tone: 'entertaining' }));
+    assert.equal(await mirror.getByRole('radio', { name: 'Entertaining', exact: true }).isChecked(), true);
+    assert.equal(await primary.getByRole('radio', { name: 'Educational', exact: true }).isChecked(), true);
+    await page.evaluate(() => { document.querySelector('#primary-controls').interpretText = realInterpreter; });
+  });
+
+  await test('a synchronous host scope change cannot launch a rewrite in the new scope', async () => {
+    const before = await page.evaluate(() => requests.length);
+    const result = await page.evaluate(async () => {
+      const { createPreferenceStore } = await import('/state.mjs');
+      const control = document.querySelector('#primary-controls');
+      control.addEventListener('preferences-change', () => {
+        control.store = createPreferenceStore({ tone: 'professional' });
+      }, { once: true });
+      return await control.submitInstruction('Make this emotional', { source: 'voice' });
+    });
+    assert.equal(result.status, 'superseded');
+    assert.equal(await primary.getByRole('radio', { name: 'Professional', exact: true }).isChecked(), true);
+    assert.equal(await page.evaluate(() => requests.length), before);
+  });
+
+  await test('disconnecting and reconnecting a view restores the current shared choices', async () => {
+    await page.evaluate(() => {
+      const control = document.querySelector('#mirror-controls');
+      control.remove();
+      oldStore.apply({ tone: 'emotional', intensity: 'balanced' });
+      document.body.append(control);
+    });
+    assert.equal(await mirror.getByRole('radio', { name: 'Emotional', exact: true }).isChecked(), true);
+    assert.equal(await mirror.getByRole('radio', { name: 'Balanced', exact: true }).isChecked(), true);
+  });
+
   if (process.env.CONTROLS_SCREENSHOT) {
     await page.setViewportSize({ width: 1280, height: 1050 });
     await page.reload();

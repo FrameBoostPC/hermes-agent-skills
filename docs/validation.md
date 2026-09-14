@@ -91,6 +91,12 @@ Fourteen Node checks passed for the store and interpreter. Twelve isolated brows
 
 All speech events in these checks were supplied by test adapters or a mock recognition class. No real microphone audio, remote speech service, live Hermes connection or partner dashboard was tested. Browser microphone support is capability-dependent and has a visible fallback. The state/interpreter tests require only Node; the browser suite additionally requires Playwright and a supported installed browser. Package/example validation still passes for all three skills and 33 case definitions.
 
+## Selector agreement follow-up
+
+The component now subscribes all views for the same editing scope to one shared store. Direct host updates refresh the visible controls, re-binding a store invalidates old pending input, and accepted settings remain explicit in the generated preference context. Wording uses the same reaffirmable radio interaction as tone/intensity. Requests wait for the current instruction to resolve and cannot take stale settings from caller metadata. Skill packages and response schemas are unchanged.
+
+Nineteen Node tests and seventeen isolated browser tests passed (36 total). Added checks cover multiple subscribers, listener mutation/failure isolation, unsubscribe and reentrant notification order, agreement across two component views and outgoing requests, wording reaffirmation, delayed input after a store change, synchronous host scope changes, and reconnection. The browser suite used headless Edge with injected speech events; actual microphone audio, Hermes generation and the partner's complete dashboard remain untested here.
+
 ## Still required in the product environment
 
 No callable Hermes installation was found on PATH or at the checked default installation locations. No Hermes installation, model configuration, or customer integration was changed.

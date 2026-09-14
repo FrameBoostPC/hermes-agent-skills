@@ -34,7 +34,45 @@ export function createPreferenceStore(initial = {}) {
   const values = { ...DEFAULTS, ...initial };
   const fieldRevisions = Object.fromEntries(FIELDS.map(field => [field, Object.hasOwn(initial, field) ? revision : 0]));
   const seenEvents = new Set();
+  const listeners = new Set();
+  const notifications = [];
+  let notifying = false;
   const snapshot = () => ({ revision, values: { ...values }, fieldRevisions: { ...fieldRevisions } });
+
+  function subscribe(listener) {
+    if (typeof listener !== 'function') throw new TypeError('A preference listener must be a function.');
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  }
+
+  function publish(result, source) {
+    const state = {
+      revision: result.state.revision,
+      values: { ...result.state.values }, fieldRevisions: { ...result.state.fieldRevisions },
+    };
+    notifications.push({ result, status: result.status, state, source, recipients: [...listeners] });
+    // Deliver reentrant updates in acceptance order, so an older notification
+    // cannot arrive after a newer one. The outer apply drains the entire queue.
+    if (notifying) return;
+    notifying = true;
+    try {
+      while (notifications.length) {
+        const notification = notifications.shift();
+        const { status, state } = notification;
+        for (const listener of notification.recipients) {
+          if (!listeners.has(listener)) continue;
+          try {
+            listener({ status, source: notification.source, state: {
+              revision: state.revision,
+              values: { ...state.values }, fieldRevisions: { ...state.fieldRevisions },
+            } });
+          } catch (error) {
+            (notification.result.notificationErrors ??= []).push(error);
+          }
+        }
+      }
+    } finally { notifying = false; }
+  }
 
   function apply(patch, { source = 'button', baseRevision = revision, eventId } = {}) {
     validatePatch(patch);
@@ -68,8 +106,10 @@ export function createPreferenceStore(initial = {}) {
       seenEvents.add(eventId);
       if (seenEvents.size > EVENT_LIMIT) seenEvents.delete(seenEvents.values().next().value);
     }
-    return { status: changed ? 'applied' : 'unchanged', state: snapshot() };
+    const result = { status: changed ? 'applied' : 'unchanged', state: snapshot() };
+    if (fields.length) publish(result, source);
+    return result;
   }
 
-  return { snapshot, apply };
+  return { snapshot, apply, subscribe };
 }

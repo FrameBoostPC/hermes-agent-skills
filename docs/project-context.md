@@ -15,6 +15,7 @@ The intended audience is people discovering AI through social media who want to 
 - A Hermes agent with a visually distinctive dashboard and UI.
 - Useful skills and workflows, including content creation, research, and planning, with further add-ons to develop.
 - Text, button and voice interaction with the same tasks and preferences. Users should be able to dictate a request, select or change writing tone/intensity through any of these inputs, and move between them during revisions.
+- All selectors for the same draft must reflect one accepted selection. A user's choice through any input remains authoritative until deliberately updated; older transcripts, defaults or model output must not silently replace it.
 - A reproducible setup that can become the basis for course lessons and demonstrations.
 
 The partner is building the Hermes agent and dashboard on their computer. This laptop holds the shared skills repository and local prototypes. The partner pulls the repository to integrate and test the skills with Hermes.

@@ -23,7 +23,20 @@ Microphone input uses `SpeechRecognition` or `webkitSpeechRecognition` when avai
 <content-preferences scope-label="This script"></content-preferences>
 ```
 
-Use one instance/store per editing scope. `scope-label` is a display label, not an asset identity or a mechanism for loading another asset's saved preferences. The host owns asset IDs, per-user persistence, source facts, run cancellation and results. Changing the label refreshes the display and invalidates pending interpretation; remount or supply the correct store when changing actual scope.
+Use one store per editing scope. Every selector view for the same scope must share that store; do not maintain independent button, chat and voice values. `scope-label` is a display label, not an asset identity or a mechanism for loading another asset's saved preferences. The host owns asset IDs, per-user persistence, source facts, run cancellation and results. Changing the label refreshes the display and invalidates pending interpretation; bind the correct store when changing actual scope.
+
+```js
+import { createPreferenceStore } from './content-preferences/state.mjs';
+const shared = createPreferenceStore();
+mainControls.store = shared;
+floatingControls.store = shared;
+// Direct host updates also refresh every connected view synchronously.
+shared.apply({ tone: 'emotional', intensity: 'calm' }, { source: 'voice' });
+```
+
+Accepted values stay authoritative until the user deliberately changes those fields. The store never restores fallbacks after generation or takes new preferences from the model's output. Every input updates the same state, the component renders from it, and each request snapshots it. Keep saved defaults as initial/fallback context; do not replay them through `apply` after the user has made a choice. Text in the instruction box is a draft or transcript, not another selected value.
+
+The `store` setter unsubscribes the old store, cancels pending interpretation/capture and immediately displays the new store. A detached view resynchronises on reconnection. `store.subscribe(listener)` returns an unsubscribe function and synchronously delivers detached `{status, state, source}` notifications for accepted nonempty updates, including same-value reaffirmations. Empty, duplicate, invalid or conflicting updates do not notify. Reentrant updates are delivered in acceptance order. One throwing listener does not prevent other views receiving updates; its error is reported in that `apply` result's `notificationErrors` array. Subscribers should render/read state rather than feed it back into the same store.
 
 ```js
 const controls = document.querySelector('content-preferences');
@@ -42,9 +55,9 @@ controls.addEventListener('content-request', ({ detail }) => {
 });
 ```
 
-`requestContent('generate' | 'rewrite')` emits one request with a detached state snapshot. Changing selectors alone emits no content request. The built-in parser treats `Make this…` as a rewrite request and `Set the tone…` as a settings update. The demo surfaces a missing-original-draft message for rewrites. Changing a control marks a previously prepared demo prompt out of date.
+`requestContent('generate' | 'rewrite')` emits one request with a detached state snapshot. Changing selectors alone emits no content request. The built-in parser treats `Make this…` as a rewrite request and `Set the tone…` as a settings update. Preparing a request waits for the component's current instruction to resolve; a completed voice instruction can issue its requested action. Caller metadata cannot override the snapshot, action, scope or preference context. The demo surfaces a missing-original-draft message for rewrites. Any shared-store change marks a previously prepared demo prompt out of date.
 
-`preferences` returns `{revision, values, fieldRevisions}`. UI `tone` maps to the skill's Writing style; `intensity` maps to Energy. `values` contains `tone`, `intensity`, `wording`, `customVoice`, and optional `secondaryTone`. The current UI offers the first four; hosts can set `secondaryTone` programmatically. Zero field revision means an untouched fallback, which the generated request explicitly labels. `setPreferences()` represents deliberate accepted choices. Use a new store with no initial values for untouched defaults.
+`preferences` returns `{revision, values, fieldRevisions}`. UI `tone` maps to the skill's Writing style; `intensity` maps to Energy. `values` contains `tone`, `intensity`, `wording`, `customVoice`, and optional `secondaryTone`. The current UI offers the first four; hosts can set `secondaryTone` programmatically. Tone, intensity and wording all support deliberately reaffirming the currently selected radio. Zero field revision means an untouched fallback, which the generated request explicitly labels. The request also states that accepted choices supersede older preferences in the brief for the same fields. `setPreferences()` represents deliberate accepted choices. Use a new store with no initial values for untouched defaults. `preferences-change` is also emitted with `status: 'rebound'` and `source: 'binding'` when the component switches stores.
 
 ## Connect the agent's language understanding
 
