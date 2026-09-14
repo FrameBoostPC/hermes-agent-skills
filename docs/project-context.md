@@ -1,6 +1,6 @@
 # Project context
 
-Updated: 2026-09-11.
+Updated: 2026-09-14.
 
 ## Current business model
 
@@ -14,9 +14,12 @@ The intended audience is people discovering AI through social media who want to 
 
 - A Hermes agent with a visually distinctive dashboard and UI.
 - Useful skills and workflows, including content creation, research, and planning, with further add-ons to develop.
+- Text, button and voice interaction with the same tasks and preferences. Users should be able to dictate a request, select or change writing tone/intensity through any of these inputs, and move between them during revisions.
 - A reproducible setup that can become the basis for course lessons and demonstrations.
 
 The partner is building the Hermes agent and dashboard on their computer. This laptop holds the shared skills repository and local prototypes. The partner pulls the repository to integrate and test the skills with Hermes.
+
+Shared input routing, synchronised preferences and concise spoken responses are specified in the [integration guide](integration.md#text-buttons-and-voice-share-one-request). They remain responsibilities of the partner's application and voice layer; the skills repository does not implement them.
 
 ## Direction for future work
 
