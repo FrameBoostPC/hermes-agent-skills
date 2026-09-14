@@ -12,6 +12,8 @@ Each skill is a portable folder with instructions, a dashboard output schema, an
 
 The skills return readable answers by default. Add `Return dashboard JSON` to request the structured result defined in that skill's `templates/output.schema.json`. See [dashboard integration](docs/integration.md) for status meanings and application responsibilities.
 
+Idea to Content supports **Engaging, Educational, Entertaining, Emotional, Professional, and Custom** writing styles. You can combine a primary style with one secondary influence and choose energy and wording, or describe the voice naturally. For example: `/idea-to-content Write a 45-second script about public speaking. Style: Engaging + Educational. Energy: Bold. Wording: Conversational. No slang.` It drafts immediately when no style is supplied. The [integration guide](docs/integration.md#idea-to-content-writing-style-controls) specifies the future dashboard selector and per-asset voice rewrites; the UI is built separately.
+
 Research Brief and Project Planner support **Summary** and **In depth** reading views. Chat defaults to Summary; ask for `In depth only` or `both views` when needed. Dashboard JSON contains a condensed `summary` and complete `data` in the same response, ready for the dashboard's view toggle. Both views retain important limitations and describe the same result.
 
 ## Structure
@@ -23,6 +25,7 @@ skills/
     templates/output.schema.json
     examples/example-output.json
     references/readable-output.md
+    references/writing-styles.md
   research-brief/
     SKILL.md
     templates/output.schema.json

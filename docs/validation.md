@@ -1,6 +1,6 @@
 # Validation notes
 
-Date: 2026-09-11. Initial baseline: all skill packages `0.1.0`. Current packages: Idea to Content `0.1.3`, Research Brief `0.1.1`, Project Planner `0.1.1`. Output contract: `1.0`.
+Date: 2026-09-14. Initial baseline: all skill packages `0.1.0`. Current packages: Idea to Content `0.2.0`, Research Brief `0.1.1`, Project Planner `0.1.1`. Output contract: `1.0`.
 
 ## Initial local baseline
 
@@ -68,6 +68,20 @@ Two separate assistant workers followed the revised instructions without reading
 - Planning: a ten-lesson course launch with 45 minutes total produced a partial preparation plan. The summary and detailed plan both deferred the full launch, used the same three tasks and 45-minute allowance, and left calendar dates and further capacity unknown. The generated JSON passed validation.
 
 The raw outputs remain under ignored `test-results/research-brief/two-views/` and `test-results/project-planner/two-views/`. These were local JSON instruction-following tests; no Hermes runtime, live research retrieval, or actual dashboard toggle was exercised in this revision. The new Summary-only chat scenarios are saved case definitions, not additional executed runs.
+
+## Selectable voice and social script revision
+
+Idea to Content `0.2.0` adds primary and optional secondary writing styles, energy, wording, natural-language overrides, and focused voice rewrites. A linked reference defines the presets and review criteria. The default remains immediate drafting; no questionnaire is required. Existing copy/guidance boundaries, format overrides, purpose preservation, claim limits, and external-action boundaries remain in place. The existing `data.brief.tone` describes the resolved voice, with no output schema change. The integration guide specifies UI choices and application-owned selections; the dashboard controls are not implemented here.
+
+On 2026-09-14, three separate assistant workers followed the revised skill and its relevant references without reading saved cases or prior outputs:
+
+- Topic-only public speaking: produced the default three hooks, selected angle, video, and two posts. The 127-word video opens with unspecific self-criticism after a rehearsal and develops a concrete exercise. The opening no longer depends on the earlier sandwich analogy. This is editorial review, not measured improvement in audience response.
+- Four styles on the same topic and supplied takeaway: produced Engaging, Educational, Entertaining, and Emotional scripts of 95, 86, 91, and 77 words. All retained the one-minute familiar-topic practice, main point/example, listener question, and revision of one unclear part. Manual review found different openings and framing, with production notes outside spoken copy. The 35–45 second durations remain estimates; delivery was not recorded.
+- Conflicting preset and specific rewrite request: produced one 26-word professional LinkedIn caption, preserving two sketches, a 30-minute call, the room-layout discussion and residential-renovation scope. It followed the explicit professional/plain override, omitted humour and a CTA, and passed JSON output validation.
+
+Package validation passed all three packages, their examples, and 33 case definitions. The skill-creator format check passed for Idea to Content. Schemas and validator code were unchanged, so the earlier validator regression suite was not rerun. The new blend and custom-writing-sample scenarios are saved case definitions, not additional executed tests. Outputs and exact prompts remain in ignored `test-results/idea-to-content/voice-controls/`. No Hermes runtime, dashboard controls, audience-performance experiment, or publishing integration was exercised.
+
+The editorial direction was checked against [YouTube's Shorts creator discussion](https://blog.youtube/creator-and-artist-stories/youtube-shorts-deep-dive/) and [official Shorts discovery guidance](https://support.google.com/youtube/answer/11914225?co=YOUTUBE._YTVideoType%3Dshorts&hl=en). These support immediate audience interest, concise storytelling and attention to observed viewer response. They do not establish a universal script formula or prove that these drafts will go viral.
 
 ## Still required in the product environment
 

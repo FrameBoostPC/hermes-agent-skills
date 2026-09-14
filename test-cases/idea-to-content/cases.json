@@ -107,5 +107,52 @@
       "Opens with a relatable situation and delivers the requested practical method in conversational language; does not replace useful detail with hype or product promotion.",
       "Does not promise productivity results, withhold steps to demand a follow, or put creator guidance in the caption."
     ]
+  },
+  {
+    "id": "topic-only-social-default",
+    "prompt": "how to get good at public speaking",
+    "expected_behavior": [
+      "Drafts immediately using disclosed reasonable audience and default voice assumptions, without a style questionnaire.",
+      "Produces three hooks introducing the same selected angle and payoff, one 45–60 second video, and two useful companion posts.",
+      "Makes the audience's reason to care apparent in the opening and delivers a concrete example or useful insight without depending on an unrelated analogy.",
+      "Keeps copy, user guidance, and production notes distinct, with no personal results or audience metrics invented."
+    ]
+  },
+  {
+    "id": "distinct-voices-same-takeaway",
+    "prompt": "Write four 35–45 second scripts about getting better at public speaking, for beginners: Engaging/Bold/Conversational; Educational/Balanced/Plain; Entertaining/Balanced/Conversational; Emotional/Calm/Conversational. Keep this takeaway in each: practise a one-minute explanation of a familiar topic aloud, with one main point and one example; ask a listener what they remember and revise one unclear part. No extra posts or hooks list, no personal experience or measured results. Keep production notes separate.",
+    "expected_behavior": [
+      "Provides four complete scripts with materially different voice, opening, rhythm or framing, not merely different headings and adjectives.",
+      "Preserves all supplied practice details and the same useful takeaway in every version, within the requested approximate duration.",
+      "Keeps emotional or comic scenes clearly general or hypothetical, with no invented autobiography or outcome promises.",
+      "Uses the selected energy and wording without assuming bold or entertaining means slang, profanity, or greater factual certainty."
+    ]
+  },
+  {
+    "id": "voice-blend-applies-to-all-assets",
+    "prompt": "We make unscented candles in reusable glass jars. Introduce this product with one 30-second script and one caption. Style: Educational with a light Entertaining influence. Energy: Balanced. Wording: Plain. No health claims, prices or offers are supplied. Return dashboard JSON.",
+    "expected_behavior": [
+      "Returns valid JSON with exactly the requested assets and describes the resolved style in the existing brief.tone field, without adding output fields.",
+      "Both caption and script reflect the selected blend and remain a supplied-fact product introduction rather than switching to an unrelated general tutorial.",
+      "Retains unscented candles and reusable glass jars while avoiding invented health benefits, prices, results, personal experience or a new offer."
+    ]
+  },
+  {
+    "id": "specific-voice-override-rewrite",
+    "prompt": "Rewrite only this LinkedIn caption for a small architecture practice. Dashboard selections: Entertaining, Bold energy, Conversational wording. Override those for this post: measured professional voice, plain wording, no humour, slang, emoji or CTA, under 75 words. Original: Our early design review includes two sketches and a 30-minute call. You can discuss the room layout before choosing a direction. We offer this review for residential renovation projects. Preserve all facts and the offer. Return dashboard JSON.",
+    "expected_behavior": [
+      "Returns valid JSON containing only one revised caption under 75 words and no additional video or hooks list.",
+      "Follows the specific professional, plain-language instructions ahead of the preset selections and records the resolved voice in brief.tone.",
+      "Preserves two sketches, a 30-minute call, room-layout discussion before choosing a direction, and residential renovation scope without new facts or a CTA."
+    ]
+  },
+  {
+    "id": "custom-sample-is-voice-only",
+    "prompt": "Write one caption announcing my upcoming weekend sketching workshop. No date, venue, price or outcomes yet. Custom voice: gentle, observant, concise. Voice sample only, not my facts: 'I taught 400 students last year. The room went quiet when we started noticing the shadows.' Use the sample's rhythm, not its biographical claims. Copy only.",
+    "expected_behavior": [
+      "Returns one finished caption reflecting the custom rhythm and wording, with no guidance or additional assets.",
+      "Introduces the supplied workshop without importing the 400-student claim, classroom event, credentials, dates, venue, price or outcomes from the sample.",
+      "Uses specific, gentle language without forcing the default energetic social style."
+    ]
   }
 ]

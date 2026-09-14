@@ -27,6 +27,41 @@ The payloads support these views:
 - `research-brief`: show findings with linked source IDs. Label `provided_text` sources as supplied excerpts and `read_url` sources as retrieved pages. Preserve fact/inference/hypothesis labels and limitations.
 - `project-planner`: show milestones and tasks by relative week. Compare planned effort with weekly hours and any one-time total-minute allowance. Dependencies use task IDs. All tasks are proposed with `status: planned`; actual completion belongs to the application's task state.
 
+## Idea to Content writing-style controls
+
+The skill accepts voice preferences now; the controls below are a handoff specification for the separately developed dashboard. They are not an implemented UI or a Hermes configuration API. Keep the first screen simple: the user's topic, their requested deliverables, and a **Writing style** selector. Put the additional controls under an optional **Customise voice** disclosure.
+
+The maintained preset definitions and writing behaviours live in [writing styles](../skills/idea-to-content/references/writing-styles.md). The skill loads that file when drafting or rewriting copy.
+
+| Control | Choices and default | Behaviour |
+| --- | --- | --- |
+| Writing style | Engaging (default), Educational, Entertaining, Emotional, Professional, Custom | One primary style. Custom accepts the user's description. |
+| Secondary style (optional) | Another named style, or none (default) | Adds a lighter influence; do not require multiple selections. |
+| Energy | Calm, Balanced (default), Bold | Changes pacing and emphasis, not factual certainty. |
+| Wording | Plain, Conversational (default), Polished | Changes vocabulary and phrasing; never automatically adds slang or profanity. |
+| Writing sample (optional) | Pasted sample or an accessible user-owned profile | A reference for voice; never a source of new product facts or personal history. |
+
+Users can also type a voice request in ordinary language. Treat explicitly changed instructions as overrides of presets and saved preferences. Do not silently let a default control override a specific instruction in the user's brief. If the user has not chosen anything, send defaults as fallback preferences. Content purpose (for example, teaching or promoting a product) and audience remain separate from voice.
+
+Pass selected values as request context alongside the topic, audience, factual material, requested assets, and any original copy being rewritten. For example:
+
+```text
+Skill: idea-to-content
+Topic: how to get good at public speaking
+Audience: beginners who hesitate to speak in front of other people
+Deliverables: one 45-second vertical video and one companion caption
+Writing style: Engaging
+Secondary style: Educational
+Energy: Bold
+Wording: Conversational
+Specific instructions: no slang; show one concrete practice exercise
+Return dashboard JSON.
+```
+
+This is a prompt example, not a new structured request schema. Keep sample/source text labelled as reference content, separate from application instructions. Save the user's actual control selections in application state; the model's existing `data.brief.tone` describes the resolved voice for review. Do not parse that prose field as the source of truth for UI settings. The output schema remains `1.0`, so existing consumers need no new fields.
+
+Changing voice requires a new generation; this differs from the research/planner reading-view toggle. Offer **Rewrite in this style** on a selected asset. Send that asset's original copy, its factual brief, audience, length constraints, and the new voice, and request only that asset. Keep the previous version available for comparison. After validation, replace only the targeted card; unrelated assets retain their copy and voice. The application owns card identity, version history, loading/error states, and any decision to save a default profile. A rewrite does not imply posting or scheduling.
+
 ## Summary / In depth toggle
 
 Research Brief and Project Planner provide two reading views from one response. Use the existing `summary` and `data` fields; the output contract remains `1.0`. Default the interface to **Summary**, with **In depth** as the other choice. Persist one response and switch which fields are displayed. Changing views does not rerun the model, gather different evidence, change the plan, or execute tasks.
