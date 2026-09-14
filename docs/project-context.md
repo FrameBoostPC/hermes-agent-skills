@@ -20,6 +20,8 @@ The intended audience is people discovering AI through social media who want to 
 
 The partner is building the Hermes agent and dashboard on their computer. This laptop holds the shared skills repository and local prototypes. The partner pulls the repository to integrate and test the skills with Hermes.
 
+Keep local mockups minimal in text and easy to redesign. Presentation files should stay separate from the working controls and shared state so the partner can adapt the appearance to their dashboard while retaining the features.
+
 Shared input routing, synchronised preferences and concise spoken responses are specified in the [integration guide](integration.md#text-buttons-and-voice-share-one-request). A [portable content-preferences component](../components/content-preferences/README.md) now provides local tone/intensity selectors, a shared preference store, simple typed commands and optional browser speech capture. The partner still connects it to the actual dashboard, the full conversational router, speech service and Hermes generation. No live agent connection is included in this laptop's preview.
 
 ## Direction for future work

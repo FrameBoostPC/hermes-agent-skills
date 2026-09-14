@@ -97,6 +97,12 @@ The component now subscribes all views for the same editing scope to one shared 
 
 Nineteen Node tests and seventeen isolated browser tests passed (36 total). Added checks cover multiple subscribers, listener mutation/failure isolation, unsubscribe and reentrant notification order, agreement across two component views and outgoing requests, wording reaffirmation, delayed input after a store change, synchronous host scope changes, and reconnection. The browser suite used headless Edge with injected speech events; actual microphone audio, Hermes generation and the partner's complete dashboard remain untested here.
 
+## Minimal prototype presentation
+
+On 2026-09-14, the interruption recovery check found no uncommitted changes; all 36 existing selector checks passed before editing. The stopped local preview server was restarted. The mockup now uses a compact form with short labels, while retaining tone/intensity, optional wording/custom directions, typed commands, microphone input and prepared prompts. Component markup and styles are separate files, with theme variables and documented integration hooks. The preference store and interpreter are unchanged.
+
+After the presentation change, all 19 Node and 17 isolated Edge browser tests passed again. The browser suite confirms the extracted component stylesheet loads, and the desktop preview was visually inspected. The package validator also passed all three skills and 33 case definitions. Speech remains simulated in these checks; Hermes generation and the partner's dashboard were not exercised.
+
 ## Still required in the product environment
 
 No callable Hermes installation was found on PATH or at the checked default installation locations. No Hermes installation, model configuration, or customer integration was changed.

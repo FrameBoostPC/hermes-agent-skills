@@ -7,11 +7,11 @@ import { pathToFileURL } from 'node:url';
 
 const modulePath = process.env.PLAYWRIGHT_MODULE || 'playwright';
 const { chromium } = await import(isAbsolute(modulePath) ? pathToFileURL(modulePath).href : modulePath);
-const files = new Set(['demo.html', 'demo.mjs', 'controls.mjs', 'state.mjs', 'intent.mjs']);
+const files = new Set(['demo.html', 'demo.css', 'demo.mjs', 'controls.mjs', 'controls-template.mjs', 'controls.css', 'state.mjs', 'intent.mjs']);
 const server = createServer(async (req, res) => {
   const file = new URL(req.url, 'http://localhost').pathname.slice(1) || 'demo.html';
   if (!files.has(file)) { res.writeHead(404).end(); return; }
-  try { res.setHeader('Content-Type', file.endsWith('.html') ? 'text/html' : 'text/javascript'); res.end(await readFile(new URL(file, import.meta.url))); }
+  try { res.setHeader('Content-Type', file.endsWith('.html') ? 'text/html' : file.endsWith('.css') ? 'text/css' : 'text/javascript'); res.end(await readFile(new URL(file, import.meta.url))); }
   catch { res.writeHead(500).end(); }
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -23,6 +23,7 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(`http://127.0.0.1:${server.address().port}/demo.html`);
   await page.waitForFunction(() => Boolean(document.querySelector('content-preferences')?.shadowRoot?.querySelector('#prepare')));
+  await page.waitForFunction(() => Boolean(document.querySelector('content-preferences').shadowRoot.querySelector('link[rel=stylesheet]')?.sheet));
   await page.evaluate(() => {
     window.requests = [];
     document.querySelector('content-preferences').addEventListener('content-request', event => window.requests.push(event.detail));

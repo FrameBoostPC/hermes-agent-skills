@@ -1,27 +1,6 @@
 import { createPreferenceStore } from './state.mjs';
 import { interpretPreferenceText, buildPreferenceContext } from './intent.mjs';
-
-const tones = [
-  ['engaging', 'Engaging', 'Create curiosity. Get to the point.'],
-  ['educational', 'Educational', 'Make an idea click with an example.'],
-  ['entertaining', 'Entertaining', 'A playful angle. A little personality.'],
-  ['emotional', 'Emotional', 'Make the feeling recognisable.'],
-  ['professional', 'Professional', 'Clear, measured and considered.'],
-  ['custom', 'Custom', 'Describe a voice of your own.'],
-];
-const intensityNotes = { calm: 'Gentle emphasis, measured pacing.', balanced: 'Natural pacing with a little punch.', bold: 'A sharper opening and stronger emphasis.' };
-const microphoneIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></svg>';
-const styles = `
-  :host{display:block;color:var(--voice-ink,#e8ece9);font-family:inherit;font-size:15px;--line:var(--voice-border,#333c36);--accent:var(--voice-accent,#d5f6a5)}
-  *{box-sizing:border-box} fieldset{padding:0;border:0;margin:0 0 26px;min-width:0}legend{padding:0;margin:0 0 12px;font-size:13px;font-weight:650;letter-spacing:.025em}
-  .scope{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:20px;margin-bottom:22px;border-bottom:1px solid var(--line);font-size:12px;color:#a5b2a9}.scope strong{color:var(--accent);font-weight:500}
-  .tone-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.choice{position:relative;display:block;cursor:pointer}.choice input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}.tile{height:100%;min-height:88px;border:1px solid var(--line);border-radius:10px;padding:14px;display:block;background:#19201b;transition:border-color .15s,background .15s}.tile strong{font-size:14px;display:block;font-weight:550}.tile small{display:block;margin-top:7px;color:#9ca99f;font-size:12px;line-height:1.45}.choice input:checked+.tile{border-color:var(--accent);background:#263422}.choice input:checked+.tile strong{color:var(--accent)}.choice input:focus-visible+.tile{outline:2px solid #fff;outline-offset:3px}.choice:hover .tile{border-color:#82967d}
-  .intensity-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:5px;border:1px solid var(--line);border-radius:10px;background:#121814}.intensity-row .tile{border:0;background:none;min-height:0;text-align:center;padding:10px;border-radius:6px}.intensity-row input:checked+.tile{background:var(--accent);color:#1b2a10}.intensity-row input:checked+.tile strong{color:#1b2a10}.help{font-size:12px;color:#9ca99f;line-height:1.6;margin:10px 0 0}
-  details{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 0 24px;padding:15px 0}summary{cursor:pointer;color:#c3cec6;font-size:13px}details label{display:block;margin:17px 0 8px;font-size:13px}select,textarea{width:100%;background:#111713;border:1px solid var(--line);border-radius:8px;color:#eef0eb;padding:11px 12px;font:inherit;font-size:14px;line-height:1.5}textarea{resize:vertical;min-height:76px}select:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}textarea::placeholder{color:#7d8a81}
-  .command-label{display:block;font-size:13px;font-weight:650;margin-bottom:6px}.lead{font-size:12px;color:#9ca99f;margin:0 0 11px;line-height:1.5}.command-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}button{border:1px solid var(--line);border-radius:8px;background:#263027;color:#e5ece5;padding:10px 14px;cursor:pointer;font:inherit;font-size:13px;font-weight:550}button:hover:enabled{border-color:#9daf97}button:disabled{opacity:.5;cursor:not-allowed}.mic{display:flex;gap:8px;align-items:center;background:transparent}.mic svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7}.mic[aria-pressed=true]{border-color:#d7a96b;color:#f2c990}.mic-note{font-size:11px;color:#8e9b91;line-height:1.5;margin:9px 0 0}.status{font-size:12px;line-height:1.55;min-height:38px;margin:18px 0 0;color:var(--accent)}.status[data-error=true]{color:#ffc6a8}.footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:12px;padding-top:20px;border-top:1px solid var(--line)}.footer span{font-size:12px;color:#9ca99f}.primary{background:var(--accent);color:#1c2a15;border-color:var(--accent);padding:12px 20px}
-  @media(max-width:520px){.tone-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.scope{align-items:flex-start}.footer{align-items:stretch;flex-direction:column}.tile{padding:12px}.primary{width:100%}}
-  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
-`;
+import { controlsTemplate } from './controls-template.mjs';
 
 export class ContentPreferences extends HTMLElement {
   static get observedAttributes() { return ['scope-label']; }
@@ -142,16 +121,7 @@ export class ContentPreferences extends HTMLElement {
   }
 
   render() {
-    this.shadowRoot.innerHTML = `<style>${styles}</style>
-      <div class="scope"><span id="scope"></span><strong id="current"></strong></div>
-      <fieldset><legend>Tone</legend><div class="tone-grid">${tones.map(([value, label, description]) => `<label class="choice"><input type="radio" name="tone" value="${value}" aria-label="${label}"><span class="tile"><strong>${label}</strong><small>${description}</small></span></label>`).join('')}</div></fieldset>
-      <fieldset><legend>Intensity</legend><div class="intensity-row">${['calm', 'balanced', 'bold'].map(value => `<label class="choice"><input type="radio" name="intensity" value="${value}" aria-label="${value[0].toUpperCase() + value.slice(1)}"><span class="tile"><strong>${value[0].toUpperCase() + value.slice(1)}</strong></span></label>`).join('')}</div><p class="help" id="intensity-help"></p></fieldset>
-      <details><summary>Customise wording</summary><fieldset style="margin-top:17px"><legend>Wording</legend><div class="intensity-row">${['plain', 'conversational', 'polished'].map(value => `<label class="choice"><input type="radio" name="wording" value="${value}" aria-label="${value[0].toUpperCase() + value.slice(1)}"><span class="tile" style="padding:10px 4px"><strong style="font-size:12px;overflow-wrap:anywhere">${value[0].toUpperCase() + value.slice(1)}</strong></span></label>`).join('')}</div></fieldset><label for="custom">Custom voice or extra wording</label><textarea id="custom" placeholder="Warm, lightly playful, no jargon…" maxlength="4000"></textarea><p class="help">These directions stay when you change tone or intensity.</p></details>
-      <label for="instruction" class="command-label">Say it or type it</label><p class="lead">Instructions apply when submitted. The selected controls always show your current choices.</p>
-      <textarea id="instruction" placeholder="Describe how it should sound…" maxlength="4000"></textarea>
-      <div class="command-actions"><button class="mic" type="button" aria-pressed="false">${microphoneIcon}<span>Use microphone</span></button><button id="apply" type="button">Apply instruction <span aria-hidden="true">↗</span></button></div>
-      <p class="mic-note" id="mic-note"></p><p class="status" role="status" aria-live="polite"></p>
-      <div class="footer"><span>One voice across your selected draft.</span><button class="primary" id="prepare" type="button">Prepare request <span aria-hidden="true">→</span></button></div>`;
+    this.shadowRoot.innerHTML = controlsTemplate;
     const root = this.shadowRoot;
     root.addEventListener('click', event => {
       const el = event.target;
@@ -186,7 +156,6 @@ export class ContentPreferences extends HTMLElement {
     if (root.querySelector('#custom').value !== values.customVoice) root.querySelector('#custom').value = values.customVoice;
     root.querySelector('#scope').textContent = this.getAttribute('scope-label') || 'Current brief';
     root.querySelector('#current').textContent = this.describe();
-    root.querySelector('#intensity-help').textContent = intensityNotes[values.intensity];
     this.syncRequestAvailability();
   }
   syncRequestAvailability() { const button = this.shadowRoot.querySelector('#prepare'); if (button) button.disabled = Boolean(this._pendingInput || this._voiceActive); }
@@ -196,7 +165,7 @@ export class ContentPreferences extends HTMLElement {
   syncMicrophone() {
     const supported = Boolean(this._speechAdapter || window.SpeechRecognition || window.webkitSpeechRecognition);
     this.shadowRoot.querySelector('.mic').disabled = !supported;
-    this.shadowRoot.querySelector('#mic-note').textContent = this._speechAdapter ? 'Voice uses the connected speech service.' : supported ? 'Your browser’s speech service may process audio online. Recording starts only when you click.' : 'Microphone transcription is unavailable in this browser. You can type here; a Hermes speech service can be connected.';
+    this.shadowRoot.querySelector('#mic-note').textContent = this._speechAdapter ? 'Connected speech service.' : supported ? 'Browser speech may be processed online.' : 'Mic unavailable. Type instead.';
   }
 
   startVoice() {

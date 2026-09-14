@@ -39,9 +39,12 @@ test-cases/<skill-name>/cases.json
 scripts/validate.py
 components/content-preferences/
   controls.mjs
+  controls-template.mjs
+  controls.css
   state.mjs
   intent.mjs
   demo.html
+  demo.css
   demo.mjs
 ```
 

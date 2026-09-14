@@ -1,0 +1,34 @@
+/* Preview page only. The portable control's styles live in controls.css. */
+:root {
+  color-scheme: dark;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #e8ece9;
+  background: #101512;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 720px; margin: auto; padding: 28px 20px; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+h1 { margin: 0; font-size: 23px; font-weight: 600; letter-spacing: -.02em; }
+h2 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
+.badge, .note { color: #a5b2a9; font-size: 12px; }
+.badge { border: 1px solid #354139; padding: 5px 9px; border-radius: 6px; }
+.panel { padding: 22px; background: #18201b; border: 1px solid #354139; border-radius: 10px; }
+label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
+textarea { width: 100%; resize: vertical; border: 1px solid #354139; border-radius: 6px; padding: 11px 12px; background: #111713; color: inherit; font: inherit; font-size: 14px; line-height: 1.5; }
+content-preferences { margin-top: 20px; }
+.note { margin: 12px 0 0; text-align: center; }
+.request { margin-top: 20px; }
+.request p { color: #a5b2a9; font-size: 13px; line-height: 1.5; }
+.request pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 320px; overflow: auto; padding: 12px; background: #111713; border: 1px solid #354139; border-radius: 6px; font: 12px/1.6 Consolas, monospace; }
+button { padding: 10px 14px; border: 1px solid #52644b; border-radius: 6px; background: #263422; color: #d5f6a5; font: inherit; font-size: 13px; cursor: pointer; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+textarea:focus-visible, button:focus-visible { outline: 2px solid #d5f6a5; outline-offset: 3px; }
+#copy-status:empty { margin: 0; }
+@media (max-width: 520px) {
+  main { padding: 20px 14px; }
+  .panel { padding: 16px; }
+  h1 { font-size: 21px; }
+}

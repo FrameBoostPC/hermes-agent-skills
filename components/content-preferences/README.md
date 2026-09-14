@@ -10,11 +10,42 @@ From the repository root:
 python -m http.server 8765 --bind 127.0.0.1 --directory components/content-preferences
 ```
 
-Open `http://127.0.0.1:8765/demo.html`. The preview provides tone cards, Calm/Balanced/Bold intensity, wording/custom directions, typed commands and optional browser microphone transcription. **Prepare request** creates a copyable Hermes prompt. It does not generate content or call Hermes. Rewriting needs an original draft and the host backend.
+Open `http://127.0.0.1:8765/demo.html`. The minimal prototype provides tone buttons, Calm/Balanced/Bold intensity, wording/custom directions, typed commands and optional browser microphone transcription. **Prepare request** creates a copyable Hermes prompt. It does not generate content or call Hermes. Rewriting needs an original draft and the host backend.
 
 The offline interpreter recognises complete, simple commands such as `Tone: educational`, `Emotional and calm`, `Make this emotional, but keep it subtle`, `Make it a little less intense`, and `Custom: warm, dry humour, no jargon`. Unrecognised, conflicting or compound instructions are reported without partially applying them. For example, `Make it emotional but no slang` requires the Custom voice field or the host interpreter. It is deliberately not a general language model. Existing custom directions survive preset changes; an explicit `Custom:` instruction replaces the previous custom description.
 
 Microphone input uses `SpeechRecognition` or `webkitSpeechRecognition` when available. Recording begins only on a user click; a completed utterance is passed through the same interpreter as typed text. Unsupported or declined microphone access leaves text/buttons usable. Some browser speech services process audio online and may not work offline; see [MDN's speech recognition reference](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition). In-app browser support is not assumed. Inject the partner's existing Hermes speech adapter for its production voice workflow.
+
+## Change the UI
+
+The prototype keeps its layout and styling separate from its behaviour:
+
+| File | Responsibility |
+| --- | --- |
+| [controls.css](controls.css) | Component colours, spacing, sizes and responsive layout |
+| [controls-template.mjs](controls-template.mjs) | Component markup and visible labels |
+| [controls.mjs](controls.mjs) | Input handling, shared-store binding and speech callbacks |
+| [state.mjs](state.mjs), [intent.mjs](intent.mjs) | Accepted choices, conflict protection and instruction interpretation; no DOM dependency |
+| [demo.html](demo.html), [demo.css](demo.css), [demo.mjs](demo.mjs) | Disposable preview page and copyable prompt; not required by the embedded component |
+
+For a quick restyle, set CSS variables on the element in your dashboard stylesheet:
+
+```css
+content-preferences {
+  --voice-accent: #b6c9ff;
+  --voice-accent-ink: #152044;
+  --voice-selected: #242e45;
+  --voice-radius: 10px;
+}
+```
+
+Other theme variables are `--voice-ink`, `--voice-muted`, `--voice-border`, `--voice-surface`, `--voice-error` and `--voice-recording`. Match text/background colours when changing themes. The component also exposes `selection`, `option`, `advanced`, `input`, `button`, `primary` and `status` shadow parts for host CSS, for example `content-preferences::part(primary) { width: 100%; }`.
+
+For layout changes, edit the template and CSS. Preserve the IDs, radio `name`/`value` attributes, `.mic`/`.status` classes and native control semantics used by `controls.mjs`; keep the radio immediately before its `.tile` for selected/focus styling. The first `details` element contains the custom voice field, and the microphone button contains a `span` for its changing label. Retain accessible labels and the live status region. Keep user-supplied text in `textContent`/`value`, outside template HTML.
+
+Ship `controls-template.mjs` and `controls.css` alongside the existing modules; the stylesheet URL resolves relative to the component, not the host page. When using a bundler, ensure it copies that CSS asset. There is no build step for direct browser imports. Run the existing browser suite after changing markup or packaging.
+
+To replace the custom element entirely with your partner's UI framework, reuse `state.mjs` and `intent.mjs`, subscribe all views to the same store and route every input through `apply`. The current component is a reference for the speech lifecycle, request snapshots and stale-input handling that the replacement must retain. Reskinning the existing component preserves those behaviours automatically.
 
 ## Embed and connect
 
